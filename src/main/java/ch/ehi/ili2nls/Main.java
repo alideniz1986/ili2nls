@@ -6,12 +6,14 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
+import ch.interlis.ili2c.metamodel.TransferDescription;
+
 public class Main {
 
 	public static void main(String[] args) {
 
 		String file = "";
-		IliDateiLesen dateiLesen = new IliDateiLesen();
+		Ili2TranslationXml dateiLesen = new Ili2TranslationXml();
 		for (String s : args) {
 			file = s;
 		}

@@ -16,7 +16,6 @@ import javax.xml.bind.annotation.XmlType;
 "documentation_en"
 })
 public class ModelElement {
-	
 	private String scopedName;
 	private String name_de;
 	private String name_fr;

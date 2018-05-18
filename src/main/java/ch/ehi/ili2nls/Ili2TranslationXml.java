@@ -6,6 +6,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+
 import ch.ehi.basics.settings.Settings;
 import ch.interlis.ili2c.config.Configuration;
 import ch.interlis.ili2c.config.FileEntry;
@@ -19,24 +23,18 @@ import ch.interlis.ili2c.metamodel.EnumerationType;
 import ch.interlis.ili2c.metamodel.Model;
 import ch.interlis.ili2c.metamodel.TransferDescription;
 
-public class IliDateiLesen {
+/**
+ * Reads data from the ili file and creates a new XML document.. 
+ *
+ */
+
+public class Ili2TranslationXml {
 
 	private ModelElements elements = new ModelElements();
+	
+	public ModelElements readAllModel(TransferDescription td, File iliFile) {
 
-	public ModelElements readAllModels(File iliFile) {
-
-		Configuration ili2cConfig = new ch.interlis.ili2c.config.Configuration();
-		ili2cConfig.setAutoCompleteModelList(true);
-		ili2cConfig.addFileEntry(new FileEntry(iliFile.getAbsolutePath(), FileEntryKind.ILIMODELFILE));
-
-		Settings settings = new Settings();
-		String currentDir = iliFile.getAbsoluteFile().getParent();
-		settings.setValue(ch.interlis.ili2c.gui.UserSettings.ILIDIRS, ch.interlis.ili2c.Main.DEFAULT_ILIDIRS);
-		HashMap<String, String> pathMap = new HashMap<String, String>();
-		pathMap.put(ch.interlis.ili2c.Main.ILI_DIR, currentDir);
-		settings.setTransientObject(ch.interlis.ili2c.gui.UserSettings.ILIDIRS_PATHMAP, pathMap);
-		TransferDescription td = null;
-		td = ch.interlis.ili2c.Main.runCompiler(ili2cConfig, settings);
+		td = compileIliModel(iliFile);
 
 		if (td == null) {
 			System.out.println("No Records Found");
@@ -45,6 +43,48 @@ public class IliDateiLesen {
 
 		printAllModels(td, iliFile.getName());
 		return elements;
+	}
+
+/** All models are read in this method
+ * @param iliFile, path of the source file
+ * @return elements, all collected elements are returned
+ */
+	public ModelElements readAllModels(File iliFile) {
+
+		TransferDescription td = compileIliModel(iliFile);
+
+		if (td == null) {
+			System.out.println("No Records Found");
+			return null;
+		}
+
+		printAllModels(td, iliFile.getName());
+		return elements;
+	}
+/** with transferdescription we can get the ili data from the source file.
+ * @param iliFile, The path of the source file.
+ * @return TransferDescription, it include all configirations, settings and all models. 
+ */
+	public static TransferDescription compileIliModel(File iliFile) {
+		return compileIliModel(iliFile, null);
+	}
+	public static TransferDescription compileIliModel(File iliFile1,File iliFile2) {
+		Configuration ili2cConfig = new ch.interlis.ili2c.config.Configuration();
+		ili2cConfig.setAutoCompleteModelList(true);
+		ili2cConfig.addFileEntry(new FileEntry(iliFile1.getAbsolutePath(), FileEntryKind.ILIMODELFILE));
+		if(iliFile2!=null) {
+			ili2cConfig.addFileEntry(new FileEntry(iliFile2.getAbsolutePath(), FileEntryKind.ILIMODELFILE));
+		}
+
+		Settings settings = new Settings();
+		String currentDir = iliFile1.getAbsoluteFile().getParent();
+		settings.setValue(ch.interlis.ili2c.gui.UserSettings.ILIDIRS, ch.interlis.ili2c.Main.DEFAULT_ILIDIRS);
+		HashMap<String, String> pathMap = new HashMap<String, String>();
+		pathMap.put(ch.interlis.ili2c.Main.ILI_DIR, currentDir);
+		settings.setTransientObject(ch.interlis.ili2c.gui.UserSettings.ILIDIRS_PATHMAP, pathMap);
+		TransferDescription td = null;
+		td = ch.interlis.ili2c.Main.runCompiler(ili2cConfig, settings);
+		return td;
 	}
 
 	private void printAllModels(TransferDescription td, String file) {
@@ -72,14 +112,29 @@ public class IliDateiLesen {
 			if (hasABaseLanguage == true) {
 				continue;
 			}
+
 			hasABaseLanguage = hasABaseLanguage(model);
 			ModelElement text = new ModelElement();
-			text.setScopedName(model.getScopedName());
+			text.setScopedName(getElementInRootLanguage(model).getScopedName()); 
 			setModelElementAllLanguages(text, model);
 			printModelElement(text);
 
 			visitAllElements(model);
 		}
+	}
+
+/** check if element contains a root language.
+ * @param ele, check the Element if it contains the root elements.
+ * @return Element, root language element
+ */
+	public static Element getElementInRootLanguage(Element ele) {
+		Element baseLanguageElement = ele.getTranslationOf();
+		if (baseLanguageElement != null) {
+			ele = baseLanguageElement;
+			baseLanguageElement = ele.getTranslationOf();
+		}
+
+		return ele;
 	}
 
 	private boolean hasABaseLanguage(Model model) {
@@ -105,10 +160,9 @@ public class IliDateiLesen {
 			Element translatedElement = baseLanguageElement;
 			baseLanguageElement = translatedElement.getTranslationOf();
 		}
-
 	}
 
-	private String getLanguage(Element ele) {
+	public static String getLanguage(Element ele) {
 		if (ele instanceof Model) {
 			return ((Model) ele).getLanguage();
 		}
@@ -116,37 +170,48 @@ public class IliDateiLesen {
 	}
 
 	private void setModelElement(ModelElement text, Element model, String language) {
-		if (language.equals("de")) {
+		if (language == null) {
+			System.out.println(model.getName());
 			text.setName_de(model.getName());
+			System.out.println(model.getDocumentation());
 			text.setDocumentation_de(model.getDocumentation());
-		} else if (language.equals("fr")) {
-			text.setName_fr(model.getName());
-			text.setDocumentation_fr(model.getDocumentation());
-		} else if (language.equals("it")) {
-			text.setName_it(model.getName());
-			text.setDocumentation_it(model.getDocumentation());
-		} else if (language.equals("en")) {
-			text.setName_en(model.getName());
-			text.setDocumentation_en(model.getDocumentation());
+		} else {
+			if (language.equals("de")) {
+				text.setName_de(model.getName());
+				text.setDocumentation_de(model.getDocumentation());
+			} else if (language.equals("fr")) {
+				text.setName_fr(model.getName());
+				text.setDocumentation_fr(model.getDocumentation());
+			} else if (language.equals("it")) {
+				text.setName_it(model.getName());
+				text.setDocumentation_it(model.getDocumentation());
+			} else if (language.equals("en")) {
+				text.setName_en(model.getName());
+				text.setDocumentation_en(model.getDocumentation());
+			}
 		}
 	}
 
 	private void setModelElementEnum(ModelElement text, ch.interlis.ili2c.metamodel.Enumeration.Element element,
 			String language) {
-		if (language.equals("de")) {
+		if (language == null) {
 			text.setName_de(element.getName());
 			text.setDocumentation_de(element.getDocumentation());
-		} else if (language.equals("fr")) {
-			text.setName_fr(element.getName());
-			text.setDocumentation_fr(element.getDocumentation());
-		} else if (language.equals("it")) {
-			text.setName_it(element.getName());
-			text.setDocumentation_it(element.getDocumentation());
-		} else if (language.equals("en")) {
-			text.setName_en(element.getName());
-			text.setDocumentation_en(element.getDocumentation());
+		} else {
+			if (language.equals("de")) {
+				text.setName_de(element.getName());
+				text.setDocumentation_de(element.getDocumentation());
+			} else if (language.equals("fr")) {
+				text.setName_fr(element.getName());
+				text.setDocumentation_fr(element.getDocumentation());
+			} else if (language.equals("it")) {
+				text.setName_it(element.getName());
+				text.setDocumentation_it(element.getDocumentation());
+			} else if (language.equals("en")) {
+				text.setName_en(element.getName());
+				text.setDocumentation_en(element.getDocumentation());
+			}
 		}
-
 	}
 
 	private void visitAllElements(Container model) {
@@ -154,7 +219,7 @@ public class IliDateiLesen {
 		while (funcI.hasNext()) {
 			Element ele = funcI.next();
 			ModelElement dto = new ModelElement();
-			dto.setScopedName(ele.getScopedName());
+			dto.setScopedName(getElementInRootLanguage(ele).getScopedName());
 			setModelElementAllLanguages(dto, ele);
 			printModelElement(dto);
 
@@ -164,13 +229,13 @@ public class IliDateiLesen {
 				AttributeDef attr = (AttributeDef) ele;
 				// If exist
 				if (attr.getDomain() instanceof EnumerationType) {
-					String text = ele.getScopedName();
+					String text = getElementInRootLanguage(ele).getScopedName();
 					printAllEnumaration((EnumerationType) attr.getDomain(), text, attr);
 				}
 			} else if (ele instanceof Domain) {
 				Domain domain = (Domain) ele;
 				if (domain.getType() instanceof EnumerationType) {
-					String text = ele.getScopedName();
+					String text = getElementInRootLanguage(ele).getScopedName();
 					printAllEnumaration((EnumerationType) domain.getType(), text, domain);
 				}
 			}
@@ -191,8 +256,8 @@ public class IliDateiLesen {
 			ModelElement text = new ModelElement();
 
 			// ScopedName
-			String scopedName = scopedNamePrefix + "." + enumEle.getName();
-			text.setScopedName((scopedName));
+			String scopedName = scopedNamePrefix + "." + getEnumerationElementInRootLanguage(enumEle).getName();
+			text.setScopedName(scopedName);
 
 			String language = getLanguage(modelEle);
 			setModelElementEnum(text, enumEle, language);
@@ -210,6 +275,28 @@ public class IliDateiLesen {
 				printAllEnumaration(enumEle.getSubEnumeration(), scopedName, modelEle);
 			}
 		}
+	}
+	
+	public static ch.interlis.ili2c.metamodel.Enumeration.Element getEnumerationElementInRootLanguage(Enumeration.Element ele) {
+		ch.interlis.ili2c.metamodel.Enumeration.Element baseLanguageElement = ele.getTranslationOf();
+		if (baseLanguageElement != null) {
+			ele = baseLanguageElement;
+			baseLanguageElement = ele.getTranslationOf();
+		}
+
+		return ele;
+	}
+
+	public static ModelElements readModelElementsXml(Unmarshaller um, File file) throws JAXBException {
+		ModelElements modelElements = (ModelElements) um.unmarshal(file);
+		return modelElements;
+	}
+
+	public static Unmarshaller createUnmarshaller() throws JAXBException {
+		Class jaxbContextPath[] = { ModelElements.class };
+		JAXBContext jaxbContext = JAXBContext.newInstance(jaxbContextPath);
+		Unmarshaller um = jaxbContext.createUnmarshaller();
+		return um;
 	}
 
 }
