@@ -4,6 +4,7 @@ import javax.xml.bind.annotation.XmlType;
 
 @XmlType(propOrder={
 "scopedName",
+"elementType",
 "name_de",
 "name_fr",
 "name_it",
@@ -15,8 +16,9 @@ import javax.xml.bind.annotation.XmlType;
 "documentation_rm",
 "documentation_en"
 })
-public class ModelElement {
+public class TranslationElement {
 	private String scopedName;
+	private String elementType;
 	private String name_de;
 	private String name_fr;
 	private String name_it;
@@ -27,7 +29,13 @@ public class ModelElement {
 	private String documentation_it;
 	private String documentation_rm;
 	private String documentation_en;
-	
+
+	public String getElementType() {
+		return elementType;
+	}
+	public void setElementType(String elementType) {
+		this.elementType = elementType;
+	}
 	public String getScopedName() {
 		return scopedName;
 	}
