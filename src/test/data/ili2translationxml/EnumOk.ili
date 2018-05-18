@@ -1,8 +1,16 @@
 INTERLIS 2.3;
 
+MODEL EnumOkBasis (de) AT "http://www.interlis.ch/ili2c/tests/" VERSION "1" =
+
+END EnumOkBasis.
+
+
 /** Das ist Dokumentation zum Modell in DE */
 
 MODEL EnumOkA (de) AT "http://www.interlis.ch/ili2c/tests/" VERSION "1" =
+	IMPORTS EnumOkBasis;
+	
+	!!@ dispName="Topic A"
 	TOPIC TopicA =
 	
 		/** Das ist Dokumentation in DE */
@@ -10,8 +18,18 @@ MODEL EnumOkA (de) AT "http://www.interlis.ch/ili2c/tests/" VERSION "1" =
 			/** Das ist Dokumentation in DE */
 			attrA : (a1,
 				/** enum docu zu a2 */
+				!!@ dispName="a 2"
 				a2(a21,a22));
+			MANDATORY CONSTRAINT DEFINED(attrA);
+			!!@ name=UniqueConstraintA
+			UNIQUE attrA;
 		END ClassA;
+		
+		ASSOCIATION =
+			roleA1 -- ClassA;
+			roleA2 -- ClassA;
+			MANDATORY CONSTRAINT DEFINED(roleA1->attrA);
+		END;
 
 	END TopicA;
 
@@ -21,17 +39,29 @@ END EnumOkA.
 MODEL EnumOkB (fr) AT "http://www.interlis.ch/ili2c/tests/" VERSION "1" 
 TRANSLATION OF EnumOkA [ "1"]
 =
+	IMPORTS EnumOkBasis;
 
 	
+	!!@ dispName="Topic B"
 	TOPIC TopicB =
 
 		CLASS ClassB =
 		/** Das ist Dokumentation in FR */
 			attrB : (b1,
 			/** enum docu zu b2 */
+			!!@ dispName="b 2"
 			b2(b21,b22));
+			MANDATORY CONSTRAINT DEFINED(attrB);
+			!!@ name=UniqueConstraintB
+			UNIQUE attrB;
 		END ClassB;
 
+		ASSOCIATION =
+			roleB1 -- ClassB;
+			roleB2 -- ClassB;
+			MANDATORY CONSTRAINT DEFINED(roleB1->attrB);
+		END;
+		
 	END TopicB;
 
 END EnumOkB.
