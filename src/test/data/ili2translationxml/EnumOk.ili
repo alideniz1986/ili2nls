@@ -1,0 +1,38 @@
+INTERLIS 2.3;
+
+/** Das ist Dokumentation zum Modell in DE */
+
+MODEL EnumOkA (de) AT "http://www.interlis.ch/ili2c/tests/" VERSION "1" =
+	TOPIC TopicA =
+	
+		/** Das ist Dokumentation in DE */
+		CLASS ClassA =
+			/** Das ist Dokumentation in DE */
+			attrA : (a1,
+				/** enum docu zu a2 */
+				a2(a21,a22));
+		END ClassA;
+
+	END TopicA;
+
+END EnumOkA.
+
+/** Das ist Dokumentation zum Modell in FR */
+MODEL EnumOkB (fr) AT "http://www.interlis.ch/ili2c/tests/" VERSION "1" 
+TRANSLATION OF EnumOkA [ "1"]
+=
+
+	
+	TOPIC TopicB =
+
+		CLASS ClassB =
+		/** Das ist Dokumentation in FR */
+			attrB : (b1,
+			/** enum docu zu b2 */
+			b2(b21,b22));
+		END ClassB;
+
+	END TopicB;
+
+END EnumOkB.
+
