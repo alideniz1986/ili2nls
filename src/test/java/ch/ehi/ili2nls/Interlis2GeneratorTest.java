@@ -71,7 +71,7 @@ public class Interlis2GeneratorTest {
 		TransferDescription newTd = Ili2TranslationXml.compileIliModel(new File(NEWFILEPATH), new File(FILEPATH));
 		assertNotNull(newTd);
 
-		// testen, dass im neuen ili fuer das model der name_fr aus dem xml steht
+		// testen, dass im neuen ili fuer das Topic der name_fr aus dem xml steht
 		Element modelEle = newTd.getElement("EnumOkB.TopicB");
 		assertNotNull(modelEle);
 		assertEquals(Topic.class, modelEle.getClass());
@@ -96,7 +96,7 @@ public class Interlis2GeneratorTest {
 		TransferDescription newTd = Ili2TranslationXml.compileIliModel(new File(NEWFILEPATH), new File(FILEPATH));
 		assertNotNull(newTd);
 
-		// testen, dass im neuen ili fuer das model der name_fr aus dem xml steht
+		// testen, dass im neuen ili fuer das Class der name_fr aus dem xml steht
 		Element modelEle = newTd.getElement("EnumOkB.TopicB.ClassB");
 		assertNotNull(modelEle);
 		assertEquals(Table.class, modelEle.getClass());
@@ -121,7 +121,7 @@ public class Interlis2GeneratorTest {
 		TransferDescription newTd = Ili2TranslationXml.compileIliModel(new File(NEWFILEPATH), new File(FILEPATH));
 		assertNotNull(newTd);
 
-		// testen, dass im neuen ili fuer das model der name_fr aus dem xml steht
+		// testen, dass im neuen ili fuer das Attribute der name_fr aus dem xml steht
 		Element modelEle = newTd.getElement("EnumOkB.TopicB.ClassB.attrB");
 		assertNotNull(modelEle);
 		assertEquals(LocalAttribute.class, modelEle.getClass());

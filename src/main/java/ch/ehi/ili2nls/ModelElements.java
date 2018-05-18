@@ -11,13 +11,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name="IliModelElements")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ModelElements implements Iterable<ModelElement> {
-    private List<ModelElement> element=new ArrayList<ModelElement>();
+public class ModelElements implements Iterable<TranslationElement> {
+    private List<TranslationElement> element=new ArrayList<TranslationElement>();
 	@Override
-	public Iterator<ModelElement> iterator() {
+	public Iterator<TranslationElement> iterator() {
 		return element.listIterator();
 	}
-	public boolean add(ModelElement ele) {
+	public boolean add(TranslationElement ele) {
 		return element.add(ele);
 	}
 

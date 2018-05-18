@@ -14,24 +14,38 @@ import ch.ehi.basics.settings.Settings;
 import ch.interlis.ili2c.config.Configuration;
 import ch.interlis.ili2c.config.FileEntry;
 import ch.interlis.ili2c.config.FileEntryKind;
+import ch.interlis.ili2c.metamodel.AssociationDef;
 import ch.interlis.ili2c.metamodel.AttributeDef;
+import ch.interlis.ili2c.metamodel.Constraint;
 import ch.interlis.ili2c.metamodel.Container;
 import ch.interlis.ili2c.metamodel.Domain;
 import ch.interlis.ili2c.metamodel.Element;
 import ch.interlis.ili2c.metamodel.Enumeration;
 import ch.interlis.ili2c.metamodel.EnumerationType;
+import ch.interlis.ili2c.metamodel.ExpressionSelection;
+import ch.interlis.ili2c.metamodel.Function;
+import ch.interlis.ili2c.metamodel.Graphic;
+import ch.interlis.ili2c.metamodel.LineForm;
+import ch.interlis.ili2c.metamodel.MetaDataUseDef;
 import ch.interlis.ili2c.metamodel.Model;
+import ch.interlis.ili2c.metamodel.Parameter;
+import ch.interlis.ili2c.metamodel.RoleDef;
+import ch.interlis.ili2c.metamodel.SignAttribute;
+import ch.interlis.ili2c.metamodel.Table;
+import ch.interlis.ili2c.metamodel.Topic;
 import ch.interlis.ili2c.metamodel.TransferDescription;
+import ch.interlis.ili2c.metamodel.Unit;
+import ch.interlis.ili2c.metamodel.View;
 
 /**
- * Reads data from the ili file and creates a new XML document.. 
+ * Reads data from the ili file and creates a new XML document..
  *
  */
 
 public class Ili2TranslationXml {
 
 	private ModelElements elements = new ModelElements();
-	
+
 	public ModelElements readAllModel(TransferDescription td, File iliFile) {
 
 		td = compileIliModel(iliFile);
@@ -45,10 +59,13 @@ public class Ili2TranslationXml {
 		return elements;
 	}
 
-/** All models are read in this method
- * @param iliFile, path of the source file
- * @return elements, all collected elements are returned
- */
+	/**
+	 * All models are read in this method
+	 * 
+	 * @param iliFile,
+	 *            path of the source file
+	 * @return elements, all collected elements are returned
+	 */
 	public ModelElements readAllModels(File iliFile) {
 
 		TransferDescription td = compileIliModel(iliFile);
@@ -61,18 +78,24 @@ public class Ili2TranslationXml {
 		printAllModels(td, iliFile.getName());
 		return elements;
 	}
-/** with transferdescription we can get the ili data from the source file.
- * @param iliFile, The path of the source file.
- * @return TransferDescription, it include all configirations, settings and all models. 
- */
+
+	/**
+	 * with transferdescription we can get the ili data from the source file.
+	 * 
+	 * @param iliFile,
+	 *            The path of the source file.
+	 * @return TransferDescription, it include all configirations, settings and all
+	 *         models.
+	 */
 	public static TransferDescription compileIliModel(File iliFile) {
 		return compileIliModel(iliFile, null);
 	}
-	public static TransferDescription compileIliModel(File iliFile1,File iliFile2) {
+
+	public static TransferDescription compileIliModel(File iliFile1, File iliFile2) {
 		Configuration ili2cConfig = new ch.interlis.ili2c.config.Configuration();
 		ili2cConfig.setAutoCompleteModelList(true);
 		ili2cConfig.addFileEntry(new FileEntry(iliFile1.getAbsolutePath(), FileEntryKind.ILIMODELFILE));
-		if(iliFile2!=null) {
+		if (iliFile2 != null) {
 			ili2cConfig.addFileEntry(new FileEntry(iliFile2.getAbsolutePath(), FileEntryKind.ILIMODELFILE));
 		}
 
@@ -114,8 +137,11 @@ public class Ili2TranslationXml {
 			}
 
 			hasABaseLanguage = hasABaseLanguage(model);
-			ModelElement text = new ModelElement();
-			text.setScopedName(getElementInRootLanguage(model).getScopedName()); 
+			TranslationElement text = new TranslationElement();
+			text = allFieldsWithSetTOEmpty(text);
+			text.setScopedName(getElementInRootLanguage(model).getScopedName());
+
+			text.setElementType(getElementType(model));
 			setModelElementAllLanguages(text, model);
 			printModelElement(text);
 
@@ -123,10 +149,73 @@ public class Ili2TranslationXml {
 		}
 	}
 
-/** check if element contains a root language.
- * @param ele, check the Element if it contains the root elements.
- * @return Element, root language element
- */
+	private TranslationElement allFieldsWithSetTOEmpty(TranslationElement text) {
+		text.setDocumentation_de("");
+		text.setDocumentation_en("");
+		text.setDocumentation_fr("");
+		text.setDocumentation_it("");
+		text.setDocumentation_rm("");
+
+		text.setName_de("");
+		text.setName_en("");
+		text.setName_fr("");
+		text.setName_it("");
+		text.setName_rm("");
+
+		text.setScopedName("");
+		return text;
+	}
+
+	private String getElementType(Object model) {
+		if(model instanceof Model) {
+			return "MODEL";
+		} else if (model instanceof AttributeDef) {
+			return "ATTRIBUTE";
+		} else if (model instanceof RoleDef) {
+			return "ROLE";
+		} else if (model instanceof Function) {
+			return "FUNCTION";
+		} else if (model instanceof Parameter) {
+			return "PARAMETER";
+		} else if (model instanceof Domain) {
+			return "DOMAIN";
+		} else if (model instanceof LineForm) {
+			return "LINE FORM";
+		} else if (model instanceof Unit) {
+			return "UNIT";
+		} else if (model instanceof Model) {
+			return "MODEL";
+		} else if (model instanceof Topic) {
+			return "TOPIC";
+		} else if (model instanceof MetaDataUseDef) {
+			return "META DATA BASKET";
+		} else if (model instanceof Table) {
+			return "TABLE";
+		} else if (model instanceof AssociationDef) {
+			return "ASSOCIATION";
+		} else if (model instanceof View) {
+			return "VIEW";
+		} else if (model instanceof Graphic) {
+			return "GRAPHIC";
+		} else if (model instanceof Constraint) {
+			return "CONSTRAINT";
+		} else if (model instanceof ExpressionSelection) {
+			return "EXPRESSION SELECTION";
+		} else if (model instanceof SignAttribute) {
+			return "SIGN ATTRIBUTE";
+		} else if (model instanceof Enumeration.Element) {
+			return "ENUMERATION ELEMENT";
+		} else { return ""; }
+		
+	}
+
+	/**
+	 * check if element contains a root language.
+	 * 
+	 * @param ele,
+	 *            check the Element if it contains the root elements.
+	 * @return Element, root language element
+	 */
 	public static Element getElementInRootLanguage(Element ele) {
 		Element baseLanguageElement = ele.getTranslationOf();
 		if (baseLanguageElement != null) {
@@ -145,11 +234,11 @@ public class Ili2TranslationXml {
 		return false;
 	}
 
-	private void printModelElement(ModelElement text) {
+	private void printModelElement(TranslationElement text) {
 		elements.add(text);
 	}
 
-	private void setModelElementAllLanguages(ModelElement text, Element model) {
+	private void setModelElementAllLanguages(TranslationElement text, Element model) {
 		String language = getLanguage(model);
 		setModelElement(text, model, language);
 		Element baseLanguageElement = model.getTranslationOf();
@@ -169,7 +258,7 @@ public class Ili2TranslationXml {
 		return ((Model) ele.getContainer(Model.class)).getLanguage();
 	}
 
-	private void setModelElement(ModelElement text, Element model, String language) {
+	private void setModelElement(TranslationElement text, Element model, String language) {
 		if (language == null) {
 			System.out.println(model.getName());
 			text.setName_de(model.getName());
@@ -192,7 +281,7 @@ public class Ili2TranslationXml {
 		}
 	}
 
-	private void setModelElementEnum(ModelElement text, ch.interlis.ili2c.metamodel.Enumeration.Element element,
+	private void setModelElementEnum(TranslationElement text, ch.interlis.ili2c.metamodel.Enumeration.Element element,
 			String language) {
 		if (language == null) {
 			text.setName_de(element.getName());
@@ -218,10 +307,19 @@ public class Ili2TranslationXml {
 		Iterator<Element> funcI = model.iterator();
 		while (funcI.hasNext()) {
 			Element ele = funcI.next();
-			ModelElement dto = new ModelElement();
+			TranslationElement dto = new TranslationElement();
 			dto.setScopedName(getElementInRootLanguage(ele).getScopedName());
 			setModelElementAllLanguages(dto, ele);
+			dto.setElementType(getElementType(ele));
 			printModelElement(dto);
+			for(String metaAttrName:ele.getMetaValues().getValues()) {
+				String metaAttrValue=ele.getMetaValue(metaAttrName);
+				System.out.println(metaAttrName+"="+metaAttrValue);
+				String metaAttrScopedName=ele.getScopedName()+".METAOBJECT."+metaAttrName;
+				TranslationElement dto2=new TranslationElement();
+				dto2.setScopedName(metaAttrScopedName);
+				elements.add(dto2);
+			}
 
 			if (ele instanceof Container) {
 				visitAllElements((Container) ele);
@@ -253,7 +351,7 @@ public class Ili2TranslationXml {
 
 		while (enumarationIterator.hasNext()) {
 			Enumeration.Element enumEle = enumarationIterator.next();
-			ModelElement text = new ModelElement();
+			TranslationElement text = new TranslationElement();
 
 			// ScopedName
 			String scopedName = scopedNamePrefix + "." + getEnumerationElementInRootLanguage(enumEle).getName();
@@ -269,15 +367,17 @@ public class Ili2TranslationXml {
 				baseLanguageElement = baseLanguageElement.getTranslationOf();
 				baseLanguageModelElement = baseLanguageModelElement.getTranslationOf();
 			}
-
+			
+			text.setElementType(getElementType(enumEle));
 			printModelElement(text);
 			if (enumEle.getSubEnumeration() != null) {
 				printAllEnumaration(enumEle.getSubEnumeration(), scopedName, modelEle);
 			}
 		}
 	}
-	
-	public static ch.interlis.ili2c.metamodel.Enumeration.Element getEnumerationElementInRootLanguage(Enumeration.Element ele) {
+
+	public static ch.interlis.ili2c.metamodel.Enumeration.Element getEnumerationElementInRootLanguage(
+			Enumeration.Element ele) {
 		ch.interlis.ili2c.metamodel.Enumeration.Element baseLanguageElement = ele.getTranslationOf();
 		if (baseLanguageElement != null) {
 			ele = baseLanguageElement;

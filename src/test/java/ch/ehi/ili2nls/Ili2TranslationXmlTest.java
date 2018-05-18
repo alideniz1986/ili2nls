@@ -15,7 +15,7 @@ public class Ili2TranslationXmlTest {
 		File file = new File(ILIFILENAME);
 		Ili2TranslationXml dateiLesen = new Ili2TranslationXml();
 		ModelElements eles = dateiLesen.readAllModels(file);
-		for (ModelElement ele : eles) {
+		for (TranslationElement ele : eles) {
 			if (ele.getScopedName() != null) {
 				if (ele.getScopedName().equals("EnumOkA")) {
 					assertEquals("Das ist Dokumentation zum Modell in DE", ele.getDocumentation_de());
@@ -30,7 +30,7 @@ public class Ili2TranslationXmlTest {
 		File file = new File(ILIFILENAME);
 		Ili2TranslationXml dateiLesen = new Ili2TranslationXml();
 		ModelElements eles = dateiLesen.readAllModels(file);
-		for (ModelElement ele : eles) {
+		for (TranslationElement ele : eles) {
 			if (ele.getScopedName() != null) {
 				if (ele.getScopedName().equals("EnumOkA")) {
 					assertEquals("Das ist Dokumentation zum Modell in FR", ele.getDocumentation_fr());
@@ -47,7 +47,7 @@ public class Ili2TranslationXmlTest {
 		File file = new File(ILIFILENAME);
 		Ili2TranslationXml dateiLesen = new Ili2TranslationXml();
 		ModelElements eles = dateiLesen.readAllModels(file);
-		for (ModelElement ele : eles) {
+		for (TranslationElement ele : eles) {
 			if (ele.getScopedName() != null) {
 				if (ele.getScopedName().equals("EnumOkA")) {
 					assertEquals("EnumOkA", ele.getName_de());
@@ -64,7 +64,7 @@ public class Ili2TranslationXmlTest {
 		File file = new File(ILIFILENAME);
 		Ili2TranslationXml dateiLesen = new Ili2TranslationXml();
 		ModelElements eles = dateiLesen.readAllModels(file);
-		for (ModelElement ele : eles) {
+		for (TranslationElement ele : eles) {
 			if (ele.getScopedName() != null) {
 				if (ele.getScopedName().equals("EnumOkA")) {
 					assertEquals("EnumOkB", ele.getName_fr());
@@ -81,7 +81,7 @@ public class Ili2TranslationXmlTest {
 		File file = new File(ILIFILENAME);
 		Ili2TranslationXml dateiLesen = new Ili2TranslationXml();
 		ModelElements eles = dateiLesen.readAllModels(file);
-		for (ModelElement ele : eles) {
+		for (TranslationElement ele : eles) {
 			if (ele.getScopedName() != null) {
 				if (ele.getScopedName().equals("EnumOkA.TopicA")) {
 					assertEquals("TopicA", ele.getName_de());
@@ -98,7 +98,7 @@ public class Ili2TranslationXmlTest {
 		File file = new File(ILIFILENAME);
 		Ili2TranslationXml dateiLesen = new Ili2TranslationXml();
 		ModelElements eles = dateiLesen.readAllModels(file);
-		for (ModelElement ele : eles) {
+		for (TranslationElement ele : eles) {
 			if (ele.getScopedName() != null) {
 				if (ele.getScopedName().equals("EnumOkA.TopicA")) {
 					assertEquals("TopicB", ele.getName_fr());
@@ -115,7 +115,7 @@ public class Ili2TranslationXmlTest {
 		File file = new File(ILIFILENAME);
 		Ili2TranslationXml dateiLesen = new Ili2TranslationXml();
 		ModelElements eles = dateiLesen.readAllModels(file);
-		for (ModelElement ele : eles) {
+		for (TranslationElement ele : eles) {
 			if (ele.getScopedName() != null) {
 				if (ele.getScopedName().equals("EnumOkA.TopicA.ClassA")) {
 					assertEquals("ClassA", ele.getName_de());
@@ -132,7 +132,7 @@ public class Ili2TranslationXmlTest {
 		File file = new File(ILIFILENAME);
 		Ili2TranslationXml dateiLesen = new Ili2TranslationXml();
 		ModelElements eles = dateiLesen.readAllModels(file);
-		for (ModelElement ele : eles) {
+		for (TranslationElement ele : eles) {
 			if (ele.getScopedName() != null) {
 				if (ele.getScopedName().equals("EnumOkA.TopicA.ClassA")) {
 					assertEquals("ClassB", ele.getName_fr());
@@ -149,7 +149,7 @@ public class Ili2TranslationXmlTest {
 		File file = new File(ILIFILENAME);
 		Ili2TranslationXml dateiLesen = new Ili2TranslationXml();
 		ModelElements eles = dateiLesen.readAllModels(file);
-		for (ModelElement ele : eles) {
+		for (TranslationElement ele : eles) {
 			if (ele.getScopedName() != null) {
 				if (ele.getScopedName().equals("EnumOkA.TopicA.ClassA.attrA")) {
 					assertEquals("attrA", ele.getName_de());
@@ -166,7 +166,7 @@ public class Ili2TranslationXmlTest {
 		File file = new File(ILIFILENAME);
 		Ili2TranslationXml dateiLesen = new Ili2TranslationXml();
 		ModelElements eles = dateiLesen.readAllModels(file);
-		for (ModelElement ele : eles) {
+		for (TranslationElement ele : eles) {
 			if (ele.getScopedName() != null) {
 				if (ele.getScopedName().equals("EnumOkA.TopicA.ClassA.attrA")) {
 					assertEquals("attrB", ele.getName_fr());
@@ -182,7 +182,7 @@ public class Ili2TranslationXmlTest {
 		File file = new File(ILIFILENAME);
 		Ili2TranslationXml dateiLesen = new Ili2TranslationXml();
 		ModelElements eles = dateiLesen.readAllModels(file);
-		for (ModelElement ele : eles) {
+		for (TranslationElement ele : eles) {
 			if (ele.getScopedName() != null) {
 				if (ele.getScopedName().equals("EnumOkA.TopicA.ClassA.attrA")) {
 					assertEquals("Das ist Dokumentation in DE", ele.getDocumentation_de());
@@ -198,7 +198,7 @@ public class Ili2TranslationXmlTest {
 		File file = new File(ILIFILENAME);
 		Ili2TranslationXml dateiLesen = new Ili2TranslationXml();
 		ModelElements eles = dateiLesen.readAllModels(file);
-		for (ModelElement ele : eles) {
+		for (TranslationElement ele : eles) {
 			if (ele.getScopedName() != null) {
 				if (ele.getScopedName().equals("EnumOkA.TopicA.ClassA.attrA")) {
 					assertEquals("Das ist Dokumentation in FR", ele.getDocumentation_fr());
@@ -217,7 +217,7 @@ public class Ili2TranslationXmlTest {
 		File file = new File(ILIFILENAME);
 		Ili2TranslationXml dateiLesen = new Ili2TranslationXml();
 		ModelElements eles = dateiLesen.readAllModels(file);
-		for (ModelElement ele : eles) {
+		for (TranslationElement ele : eles) {
 			if (ele.getScopedName() != null) {
 				if (ele.getScopedName().equals("EnumOkA.TopicA.ClassA.attrA.a2")) {
 					assertEquals("enum docu zu a2", ele.getDocumentation_de());
@@ -232,7 +232,7 @@ public class Ili2TranslationXmlTest {
 		File file = new File(ILIFILENAME);
 		Ili2TranslationXml dateiLesen = new Ili2TranslationXml();
 		ModelElements eles = dateiLesen.readAllModels(file);
-		for (ModelElement ele : eles) {
+		for (TranslationElement ele : eles) {
 			if (ele.getScopedName() != null) {
 				if (ele.getScopedName().equals("EnumOkA.TopicA.ClassA.attrA.a2")) {
 					assertEquals("enum docu zu b2", ele.getDocumentation_fr());
@@ -249,7 +249,7 @@ public class Ili2TranslationXmlTest {
 		File file = new File(ILIFILENAME);
 		Ili2TranslationXml dateiLesen = new Ili2TranslationXml();
 		ModelElements eles = dateiLesen.readAllModels(file);
-		for (ModelElement ele : eles) {
+		for (TranslationElement ele : eles) {
 			if (ele.getScopedName() != null) {
 				if (ele.getScopedName().equals("EnumOkA.TopicA.ClassA.attrA.a2.a21")) {
 					assertEquals("a21", ele.getName_de());
@@ -266,7 +266,7 @@ public class Ili2TranslationXmlTest {
 		File file = new File(ILIFILENAME);
 		Ili2TranslationXml dateiLesen = new Ili2TranslationXml();
 		ModelElements eles = dateiLesen.readAllModels(file);
-		for (ModelElement ele : eles) {
+		for (TranslationElement ele : eles) {
 			if (ele.getScopedName() != null) {
 				if (ele.getScopedName().equals("EnumOkA.TopicA.ClassA.attrA.a2.a21")) {
 					assertEquals("b21", ele.getName_fr());

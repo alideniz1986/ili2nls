@@ -1650,10 +1650,10 @@ public void printAttributeBasePath(Container scope, AttributeDef attrib) {
 
 private String getDocumentationInLanguage(Element ele, String language) {
 	String modelName = "";
-	Iterator<ModelElement> iteratorModelElement = modelElements.iterator();
+	Iterator<TranslationElement> iteratorModelElement = modelElements.iterator();
 	
 	while (iteratorModelElement.hasNext()) { 
-		ModelElement element = iteratorModelElement.next();
+		TranslationElement element = iteratorModelElement.next();
 		if (Ili2TranslationXml.getElementInRootLanguage(ele).getScopedName().equals(element.getScopedName())) {
 			if (language.equals("fr")) {
 				modelName = element.getDocumentation_fr();
@@ -1674,10 +1674,10 @@ private String getDocumentationInLanguage(Element ele, String language) {
 }
 private String getNameInLanguage(Element ele, String language) {
 	String modelName = "";
-	Iterator<ModelElement> iteratorModelElement = modelElements.iterator();
+	Iterator<TranslationElement> iteratorModelElement = modelElements.iterator();
 	
 	while (iteratorModelElement.hasNext()) { 
-		ModelElement element = iteratorModelElement.next();
+		TranslationElement element = iteratorModelElement.next();
 		if (Ili2TranslationXml.getElementInRootLanguage(ele).getScopedName().equals(element.getScopedName())) {
 			if (language.equals("fr")) {
 				modelName = element.getName_fr();
@@ -2299,10 +2299,10 @@ private void printFormatedTypeMinMax(FormattedType ft) {
 
   private String getEnumerationElementNameInLanguage(String scopedNamePrefix, String language) {
 		String modelName = "";
-		Iterator<ModelElement> iteratorModelElement = modelElements.iterator();
+		Iterator<TranslationElement> iteratorModelElement = modelElements.iterator();
 		
 		while (iteratorModelElement.hasNext()) { 
-			ModelElement element = iteratorModelElement.next();
+			TranslationElement element = iteratorModelElement.next();
 			if (scopedNamePrefix.equals(element.getScopedName())) {
 				if (language.equals("fr")) {
 					modelName = element.getName_fr();
@@ -2323,10 +2323,10 @@ private void printFormatedTypeMinMax(FormattedType ft) {
 }
 private String getEnumerationElementDocumentationInLanguage(String scopedNamePrefix, String language) {
 	String modelName = "";
-	Iterator<ModelElement> iteratorModelElement = modelElements.iterator();
+	Iterator<TranslationElement> iteratorModelElement = modelElements.iterator();
 	
 	while (iteratorModelElement.hasNext()) { 
-		ModelElement element = iteratorModelElement.next();
+		TranslationElement element = iteratorModelElement.next();
 		if (scopedNamePrefix.equals(element.getScopedName())) {
 			if (language.equals("fr")) {
 				modelName = element.getDocumentation_fr();
