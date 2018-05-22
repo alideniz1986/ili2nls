@@ -28,6 +28,21 @@ public class Ili2TranslationXmlTest {
 		}
 		fail("MODEL can not be found!");
 	}
+	@Test
+	public void model2() {
+		File file = new File(ILIFILENAME);
+		Ili2TranslationXml dateiLesen = new Ili2TranslationXml();
+		ModelElements eles = dateiLesen.readAllModels(file);
+		for (TranslationElement ele : eles) {
+			if (ele.getScopedName() != null) {
+				if (ele.getScopedName().equals("EnumOkBasis")) {
+					assertEquals("EnumOkBasis", ele.getName_de());
+					return;
+				}
+			}
+		}
+		fail("MODEL EnumOkBasis can not be found!");
+	}
 	
 	//Es ueberprueft, ob die Topic korrekt in das ili file geschrieben wurde.
 	@Test

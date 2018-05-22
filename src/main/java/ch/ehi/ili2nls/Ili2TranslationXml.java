@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -82,7 +81,7 @@ public class Ili2TranslationXml {
 	}
 
 	/**
-	 * with transferdescription we can get the ili data from the source file.
+	 * with transferdescription we can get ili data from the source file.
 	 * 
 	 * @param iliFile,
 	 *            The path of the source file.
@@ -125,20 +124,10 @@ public class Ili2TranslationXml {
 		while (modeli.hasNext()) {
 			Model model = modeli.next();
 
-			String pathName = model.getFileName();
-			if (pathName == null)
-				continue;
-
-			if (!pathName.contains(file)) {
+			if (controlOfTheFileName(model, file)) {
 				continue;
 			}
 
-			// Control of the another Language
-			if (hasABaseLanguage == true) {
-				continue;
-			}
-
-			hasABaseLanguage = hasABaseLanguage(model);
 			TranslationElement text = new TranslationElement();
 			text = allFieldsWithSetTOEmpty(text);
 			text.setScopedName(getElementInRootLanguage(model).getScopedName());
@@ -149,6 +138,20 @@ public class Ili2TranslationXml {
 
 			visitAllElements(model);
 		}
+	}
+
+	private boolean controlOfTheFileName(Model model, String file) {
+
+		if (model.getFileName() == null) {
+			return true;
+		}
+
+		File fileNameFromModel = new File(model.getFileName());
+		File fileNameFromIli = new File(file);
+		if (!fileNameFromModel.getName().equals(fileNameFromIli.getName())) {
+			return true;
+		}
+		return false;
 	}
 
 	private TranslationElement allFieldsWithSetTOEmpty(TranslationElement text) {
@@ -210,7 +213,6 @@ public class Ili2TranslationXml {
 		} else {
 			return "";
 		}
-
 	}
 
 	/**
@@ -416,11 +418,11 @@ public class Ili2TranslationXml {
 			TranslationElement translationElement = new TranslationElement();
 			translationElement.setElementType(METAATTRIBUTE);
 			translationElement.setScopedName(metaAttrScopedName);
-			
+
 			String metaAttrValue = ele.getMetaValues().getValue(metaAttrName);
 			String language = getLanguage(modelEle);
 			setTranslationElementName(translationElement, metaAttrValue, language);
-			
+
 			Element baseLanguageModelElement = modelEle.getTranslationOf();
 			Enumeration.Element baseLanguageElement = ele.getTranslationOf();
 			while (baseLanguageElement != null) {
