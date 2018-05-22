@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -44,6 +45,7 @@ import ch.interlis.ili2c.metamodel.View;
 
 public class Ili2TranslationXml {
 
+	private static final String METAATTRIBUTE = "METAATTRIBUTE";
 	private ModelElements elements = new ModelElements();
 
 	public ModelElements readAllModel(TransferDescription td, File iliFile) {
@@ -167,7 +169,7 @@ public class Ili2TranslationXml {
 	}
 
 	private String getElementType(Object model) {
-		if(model instanceof Model) {
+		if (model instanceof Model) {
 			return "MODEL";
 		} else if (model instanceof AttributeDef) {
 			return "ATTRIBUTE";
@@ -205,8 +207,10 @@ public class Ili2TranslationXml {
 			return "SIGN ATTRIBUTE";
 		} else if (model instanceof Enumeration.Element) {
 			return "ENUMERATION ELEMENT";
-		} else { return ""; }
-		
+		} else {
+			return "";
+		}
+
 	}
 
 	/**
@@ -260,9 +264,7 @@ public class Ili2TranslationXml {
 
 	private void setModelElement(TranslationElement text, Element model, String language) {
 		if (language == null) {
-			System.out.println(model.getName());
 			text.setName_de(model.getName());
-			System.out.println(model.getDocumentation());
 			text.setDocumentation_de(model.getDocumentation());
 		} else {
 			if (language.equals("de")) {
@@ -281,6 +283,22 @@ public class Ili2TranslationXml {
 		}
 	}
 
+	private void setTranslationElementName(TranslationElement text, String name, String language) {
+		if (language == null) {
+			text.setName_de(name);
+		} else {
+			if (language.equals("de")) {
+				text.setName_de(name);
+			} else if (language.equals("fr")) {
+				text.setName_fr(name);
+			} else if (language.equals("it")) {
+				text.setName_it(name);
+			} else if (language.equals("en")) {
+				text.setName_en(name);
+			}
+		}
+	}
+
 	private void setModelElementEnum(TranslationElement text, ch.interlis.ili2c.metamodel.Enumeration.Element element,
 			String language) {
 		if (language == null) {
@@ -295,7 +313,7 @@ public class Ili2TranslationXml {
 				text.setDocumentation_fr(element.getDocumentation());
 			} else if (language.equals("it")) {
 				text.setName_it(element.getName());
-				text.setDocumentation_it(element.getDocumentation());
+				text.setDocumentation_de(element.getDocumentation());
 			} else if (language.equals("en")) {
 				text.setName_en(element.getName());
 				text.setDocumentation_en(element.getDocumentation());
@@ -311,15 +329,8 @@ public class Ili2TranslationXml {
 			dto.setScopedName(getElementInRootLanguage(ele).getScopedName());
 			setModelElementAllLanguages(dto, ele);
 			dto.setElementType(getElementType(ele));
+			addTranslationElementForMetaValues(ele);
 			printModelElement(dto);
-			for(String metaAttrName:ele.getMetaValues().getValues()) {
-				String metaAttrValue=ele.getMetaValue(metaAttrName);
-				System.out.println(metaAttrName+"="+metaAttrValue);
-				String metaAttrScopedName=ele.getScopedName()+".METAOBJECT."+metaAttrName;
-				TranslationElement dto2=new TranslationElement();
-				dto2.setScopedName(metaAttrScopedName);
-				elements.add(dto2);
-			}
 
 			if (ele instanceof Container) {
 				visitAllElements((Container) ele);
@@ -339,6 +350,27 @@ public class Ili2TranslationXml {
 			}
 		}
 
+	}
+
+	private void addTranslationElementForMetaValues(Element ele) {
+		String eleScopedName = getElementInRootLanguage(ele).getScopedName();
+		for (String metaAttrName : ele.getMetaValues().getValues()) {
+			String metaAttrScopedName = getMetaAttributeScopedName(eleScopedName, metaAttrName);
+			TranslationElement translationElement = new TranslationElement();
+			translationElement.setElementType(METAATTRIBUTE);
+			translationElement.setScopedName(metaAttrScopedName);
+			while (ele != null) {
+				String language = getLanguage(ele);
+				String metaAttrValue = ele.getMetaValue(metaAttrName);
+				setTranslationElementName(translationElement, metaAttrValue, language);
+				ele = ele.getTranslationOf();
+			}
+			elements.add(translationElement);
+		}
+	}
+
+	private String getMetaAttributeScopedName(String eleScopedName, String metaAttrName) {
+		return eleScopedName + ".METAOBJECT." + metaAttrName;
 	}
 
 	private void printAllEnumaration(EnumerationType et, String scopedNamePrefix, Element modelElement) {
@@ -367,12 +399,39 @@ public class Ili2TranslationXml {
 				baseLanguageElement = baseLanguageElement.getTranslationOf();
 				baseLanguageModelElement = baseLanguageModelElement.getTranslationOf();
 			}
-			
+
 			text.setElementType(getElementType(enumEle));
+			addMetaValues(enumEle, scopedName, modelEle);
 			printModelElement(text);
 			if (enumEle.getSubEnumeration() != null) {
 				printAllEnumaration(enumEle.getSubEnumeration(), scopedName, modelEle);
 			}
+		}
+	}
+
+	private void addMetaValues(ch.interlis.ili2c.metamodel.Enumeration.Element ele, String scopedName,
+			Element modelEle) {
+		for (String metaAttrName : ele.getMetaValues().getValues()) {
+			String metaAttrScopedName = getMetaAttributeScopedName(scopedName, metaAttrName);
+			TranslationElement translationElement = new TranslationElement();
+			translationElement.setElementType(METAATTRIBUTE);
+			translationElement.setScopedName(metaAttrScopedName);
+			
+			String metaAttrValue = ele.getMetaValues().getValue(metaAttrName);
+			String language = getLanguage(modelEle);
+			setTranslationElementName(translationElement, metaAttrValue, language);
+			
+			Element baseLanguageModelElement = modelEle.getTranslationOf();
+			Enumeration.Element baseLanguageElement = ele.getTranslationOf();
+			while (baseLanguageElement != null) {
+				String langu = getLanguage(baseLanguageModelElement);
+				String metaValue = baseLanguageElement.getMetaValues().getValue(metaAttrName);
+				setTranslationElementName(translationElement, metaValue, langu);
+				baseLanguageElement = baseLanguageElement.getTranslationOf();
+				baseLanguageModelElement = baseLanguageModelElement.getTranslationOf();
+			}
+
+			elements.add(translationElement);
 		}
 	}
 
