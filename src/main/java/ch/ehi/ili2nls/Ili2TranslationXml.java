@@ -22,16 +22,12 @@ import ch.interlis.ili2c.metamodel.Domain;
 import ch.interlis.ili2c.metamodel.Element;
 import ch.interlis.ili2c.metamodel.Enumeration;
 import ch.interlis.ili2c.metamodel.EnumerationType;
-import ch.interlis.ili2c.metamodel.Evaluable;
-import ch.interlis.ili2c.metamodel.Expression;
 import ch.interlis.ili2c.metamodel.ExpressionSelection;
 import ch.interlis.ili2c.metamodel.Function;
 import ch.interlis.ili2c.metamodel.Graphic;
 import ch.interlis.ili2c.metamodel.LineForm;
-import ch.interlis.ili2c.metamodel.MandatoryConstraint;
 import ch.interlis.ili2c.metamodel.MetaDataUseDef;
 import ch.interlis.ili2c.metamodel.Model;
-import ch.interlis.ili2c.metamodel.ObjectPath;
 import ch.interlis.ili2c.metamodel.Parameter;
 import ch.interlis.ili2c.metamodel.RoleDef;
 import ch.interlis.ili2c.metamodel.SignAttribute;
@@ -273,21 +269,41 @@ public class Ili2TranslationXml {
 
 	private void setModelElement(TranslationElement text, Element model, String language) {
 		if (language == null) {
-			text.setName_de(model.getName());
-			text.setDocumentation_de(model.getDocumentation());
+			if (model.getName() != null) {
+				text.setName_de(model.getName());
+			}
+			if (model.getDocumentation() != null) {
+				text.setDocumentation_de(model.getDocumentation());
+			}
 		} else {
 			if (language.equals("de")) {
-				text.setName_de(model.getName());
-				text.setDocumentation_de(model.getDocumentation());
+				if (model.getName() != null) {
+					text.setName_de(model.getName());
+				}
+				if (model.getDocumentation() != null) {
+					text.setDocumentation_de(model.getDocumentation());
+				}	
 			} else if (language.equals("fr")) {
-				text.setName_fr(model.getName());
-				text.setDocumentation_fr(model.getDocumentation());
+				if (model.getName() != null) {
+					text.setName_fr(model.getName());
+				}
+				if (model.getDocumentation() != null) {
+					text.setDocumentation_fr(model.getDocumentation());
+				}
 			} else if (language.equals("it")) {
-				text.setName_it(model.getName());
-				text.setDocumentation_it(model.getDocumentation());
+				if (model.getName() != null) {
+					text.setName_it(model.getName());
+				}
+				if (model.getDocumentation() != null) {
+					text.setDocumentation_it(model.getDocumentation());
+				}
 			} else if (language.equals("en")) {
-				text.setName_en(model.getName());
-				text.setDocumentation_en(model.getDocumentation());
+				if (model.getName() != null) {
+					text.setName_en(model.getName());
+				} 
+				if (model.getDocumentation() != null) {
+					text.setDocumentation_en(model.getDocumentation());
+				}
 			}
 		}
 	}
