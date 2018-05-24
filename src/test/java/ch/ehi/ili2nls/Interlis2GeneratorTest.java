@@ -57,7 +57,6 @@ public class Interlis2GeneratorTest {
 		assertEquals(DataModel.class, modelEle.getClass());
 		assertEquals(FR, ((DataModel) modelEle).getLanguage());
 		assertNotNull(modelEle.getTranslationOf());
-		System.out.println(modelEle.getTranslationOf().getScopedName());
 		assertEquals("EnumOkA", modelEle.getTranslationOf().getScopedName());
 	}
 

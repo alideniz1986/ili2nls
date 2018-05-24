@@ -52,7 +52,6 @@ public class Ili2TranslationXml {
 		td = compileIliModel(iliFile);
 
 		if (td == null) {
-			System.out.println("No Records Found");
 			return null;
 		}
 
@@ -72,7 +71,6 @@ public class Ili2TranslationXml {
 		TransferDescription td = compileIliModel(iliFile);
 
 		if (td == null) {
-			System.out.println("No Records Found");
 			return null;
 		}
 
