@@ -2604,8 +2604,6 @@ protected Class printElement(Container container, Class lastClass, ch.interlis.i
       }
 	  else if (elt instanceof RoleDef)
 	  {
-
-		//boolean isLastRolDef = giveLastRoleDef(container, (RoleDef)elt);
 		printRoleDef(container, (RoleDef) elt, language);
 		lastClass = RoleDef.class;
 	  }

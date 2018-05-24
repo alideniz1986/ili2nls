@@ -14,8 +14,10 @@ import ch.ehi.basics.settings.Settings;
 import ch.interlis.ili2c.config.Configuration;
 import ch.interlis.ili2c.config.FileEntry;
 import ch.interlis.ili2c.config.FileEntryKind;
+import ch.interlis.ili2c.metamodel.AbstractClassDef;
 import ch.interlis.ili2c.metamodel.AssociationDef;
 import ch.interlis.ili2c.metamodel.AttributeDef;
+import ch.interlis.ili2c.metamodel.Constant.Structured;
 import ch.interlis.ili2c.metamodel.Constraint;
 import ch.interlis.ili2c.metamodel.Container;
 import ch.interlis.ili2c.metamodel.Domain;
@@ -204,7 +206,18 @@ public class Ili2TranslationXml {
 		} else if (model instanceof MetaDataUseDef) {
 			return "META DATA BASKET";
 		} else if (model instanceof Table) {
-			return "TABLE";
+			AbstractClassDef def = (Table) model;
+			if (def instanceof Table) {
+				Table tdef = (Table) def;
+				if (tdef.isIdentifiable()) {
+					return "CLASS";
+				} else {
+					return "STRUCTURE";
+				}
+			} else if (def instanceof AssociationDef) {
+				return "ASSOCIATION";
+			} else
+				return "";
 		} else if (model instanceof AssociationDef) {
 			return "ASSOCIATION";
 		} else if (model instanceof View) {
@@ -280,7 +293,7 @@ public class Ili2TranslationXml {
 				}
 				if (model.getDocumentation() != null) {
 					text.setDocumentation_de(model.getDocumentation());
-				}	
+				}
 			} else if (language.equals("fr")) {
 				if (model.getName() != null) {
 					text.setName_fr(model.getName());
@@ -298,7 +311,7 @@ public class Ili2TranslationXml {
 			} else if (language.equals("en")) {
 				if (model.getName() != null) {
 					text.setName_en(model.getName());
-				} 
+				}
 				if (model.getDocumentation() != null) {
 					text.setDocumentation_en(model.getDocumentation());
 				}

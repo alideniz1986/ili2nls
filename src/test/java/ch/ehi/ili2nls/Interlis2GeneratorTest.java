@@ -11,7 +11,6 @@ import java.util.Iterator;
 
 import javax.xml.bind.Unmarshaller;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import ch.interlis.ili2c.metamodel.AssociationDef;
