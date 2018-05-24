@@ -15,6 +15,7 @@ public class Ili2TranslationXmlTest {
 		File file = new File(ILIFILENAME);
 		Ili2TranslationXml dateiLesen = new Ili2TranslationXml();
 		ModelElements eles = dateiLesen.readAllModels(file);
+		int modelAcount=0;
 		for (TranslationElement ele : eles) {
 			if (ele.getScopedName() != null) {
 				if (ele.getScopedName().equals("EnumOkA")) {
@@ -22,11 +23,11 @@ public class Ili2TranslationXmlTest {
 					assertEquals("EnumOkB", ele.getName_fr());
 					assertEquals("Das ist Dokumentation zum Modell in DE", ele.getDocumentation_de());
 					assertEquals("Das ist Dokumentation zum Modell in FR", ele.getDocumentation_fr());
-					return;
+					modelAcount++;
 				}
 			}
 		}
-		fail("MODEL can not be found!");
+		assertEquals(1,modelAcount);
 	}
 	@Test
 	public void model2() {
