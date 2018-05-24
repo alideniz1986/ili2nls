@@ -17,7 +17,7 @@ public class Main2 {
 		for (String s : args) {
 			file = s;
 		}
-
+		
 		Unmarshaller um = Ili2TranslationXml.createUnmarshaller();
 		ModelElements modelElements = Ili2TranslationXml.readModelElementsXml(um, new File(file + ".xml"));
 		TransferDescription td = Ili2TranslationXml.compileIliModel(new File(file));

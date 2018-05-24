@@ -22,12 +22,16 @@ import ch.interlis.ili2c.metamodel.Domain;
 import ch.interlis.ili2c.metamodel.Element;
 import ch.interlis.ili2c.metamodel.Enumeration;
 import ch.interlis.ili2c.metamodel.EnumerationType;
+import ch.interlis.ili2c.metamodel.Evaluable;
+import ch.interlis.ili2c.metamodel.Expression;
 import ch.interlis.ili2c.metamodel.ExpressionSelection;
 import ch.interlis.ili2c.metamodel.Function;
 import ch.interlis.ili2c.metamodel.Graphic;
 import ch.interlis.ili2c.metamodel.LineForm;
+import ch.interlis.ili2c.metamodel.MandatoryConstraint;
 import ch.interlis.ili2c.metamodel.MetaDataUseDef;
 import ch.interlis.ili2c.metamodel.Model;
+import ch.interlis.ili2c.metamodel.ObjectPath;
 import ch.interlis.ili2c.metamodel.Parameter;
 import ch.interlis.ili2c.metamodel.RoleDef;
 import ch.interlis.ili2c.metamodel.SignAttribute;
@@ -113,18 +117,21 @@ public class Ili2TranslationXml {
 
 	private void printAllModels(TransferDescription td, String file) {
 		Iterator<Model> modeli = td.iterator();
-		boolean hasABaseLanguage = false;
 
 		List<Model> list = new ArrayList<Model>();
 		while (modeli.hasNext()) {
 			list.add(0, modeli.next());
 		}
-
+		String baseLanguageModel = "";
 		modeli = list.iterator();
 		while (modeli.hasNext()) {
 			Model model = modeli.next();
 
 			if (controlOfTheFileName(model, file)) {
+				continue;
+			}
+
+			if (model.getName().equals(baseLanguageModel)) {
 				continue;
 			}
 
@@ -137,7 +144,17 @@ public class Ili2TranslationXml {
 			printModelElement(text);
 
 			visitAllElements(model);
+
+			baseLanguageModel = hasATranslation(model);
 		}
+	}
+
+	private String hasATranslation(Model model) {
+
+		if (model.getTranslationOf() != null) {
+			return model.getTranslationOf().getName();
+		}
+		return "";
 	}
 
 	private boolean controlOfTheFileName(Model model, String file) {
@@ -230,14 +247,6 @@ public class Ili2TranslationXml {
 		}
 
 		return ele;
-	}
-
-	private boolean hasABaseLanguage(Model model) {
-		Element baseLanguageElement = model.getTranslationOf();
-		if (baseLanguageElement != null) {
-			return true;
-		}
-		return false;
 	}
 
 	private void printModelElement(TranslationElement text) {
