@@ -1780,9 +1780,6 @@ private String getDocumentationInLanguage(Element ele, String language) {
 			} else if (language.equals("it")) {
 				modelName = element.getDocumentation_it();
 				return modelName;
-			} else if (language.equals("rm")) {
-				modelName = element.getDocumentation_rm();
-				return modelName;
 			} else if (language.equals("de")) {
 				modelName = element.getDocumentation_de();
 				return modelName;
@@ -1806,9 +1803,6 @@ private String getNameInLanguage(Element ele, String language) {
 				return modelName;
 			} else if (language.equals("it")) {
 				modelName = element.getName_it();
-				return modelName;
-			} else if (language.equals("rm")) {
-				modelName = element.getName_rm();
 				return modelName;
 			} else if (language.equals("de")) {
 				modelName = element.getName_de();
@@ -2427,9 +2421,6 @@ private void printFormatedTypeMinMax(FormattedType ft) {
 				} else if (language.equals("it")) {
 					modelName = element.getName_it();
 					return modelName;
-				} else if (language.equals("rm")) {
-					modelName = element.getName_rm();
-					return modelName;
 				} else if (language.equals("de")) {
 					modelName = element.getName_de();
 					return modelName;
@@ -2453,9 +2444,6 @@ private String getEnumerationElementDocumentationInLanguage(String scopedNamePre
 				return modelName;
 			} else if (language.equals("it")) {
 				modelName = element.getDocumentation_it();
-				return modelName;
-			} else if (language.equals("rm")) {
-				modelName = element.getDocumentation_rm();
 				return modelName;
 			} else if (language.equals("de")) {
 				modelName = element.getDocumentation_de();

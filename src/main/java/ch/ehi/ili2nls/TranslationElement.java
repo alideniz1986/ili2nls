@@ -8,12 +8,10 @@ import javax.xml.bind.annotation.XmlType;
 "name_de",
 "name_fr",
 "name_it",
-"name_rm",
 "name_en",
 "documentation_de",
 "documentation_fr",
 "documentation_it",
-"documentation_rm",
 "documentation_en"
 })
 public class TranslationElement {
@@ -22,12 +20,10 @@ public class TranslationElement {
 	private String name_de;
 	private String name_fr;
 	private String name_it;
-	private String name_rm;
 	private String name_en;
 	private String documentation_de;
 	private String documentation_fr;
 	private String documentation_it;
-	private String documentation_rm;
 	private String documentation_en;
 
 	public String getElementType() {
@@ -89,18 +85,5 @@ public class TranslationElement {
 	}
 	public void setDocumentation_en(String documentation_en) {
 		this.documentation_en = documentation_en;
-	}
-	public String getName_rm() {
-		return name_rm;
-	}
-	public void setName_rm(String name_rm) {
-		this.name_rm = name_rm;
-	}
-	public String getDocumentation_rm() {
-		return documentation_rm;
-	}
-	public void setDocumentation_rm(String documentation_rm) {
-		this.documentation_rm = documentation_rm;
 	}	
-	
 }

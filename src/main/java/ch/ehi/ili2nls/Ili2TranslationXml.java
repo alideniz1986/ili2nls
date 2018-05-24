@@ -176,13 +176,11 @@ public class Ili2TranslationXml {
 		text.setDocumentation_en("");
 		text.setDocumentation_fr("");
 		text.setDocumentation_it("");
-		text.setDocumentation_rm("");
 
 		text.setName_de("");
 		text.setName_en("");
 		text.setName_fr("");
 		text.setName_it("");
-		text.setName_rm("");
 
 		text.setScopedName("");
 		return text;
