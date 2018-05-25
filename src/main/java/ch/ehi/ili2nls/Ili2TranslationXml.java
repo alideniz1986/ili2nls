@@ -40,16 +40,20 @@ import ch.interlis.ili2c.metamodel.View;
 import static ch.ehi.ili2nls.Consts.*;
 
 /**
- * Reads data from the ili file and creates a new XML document..
- *
+ * Reads data from the ili file and creates a new XML document
  */
 
 public class Ili2TranslationXml {
 
-	
-
 	private ModelElements elements = new ModelElements();
 
+	/**
+	 * All models are read in this method
+	 * 
+	 * @param TransferDesc - source data
+	 * @param iliFile - path of the source file 
+	 * @return all collected elements are returned
+	 */
 	public ModelElements readAllModel(TransferDescription td, File iliFile) {
 
 		td = compileIliModel(iliFile);
@@ -65,9 +69,8 @@ public class Ili2TranslationXml {
 	/**
 	 * All models are read in this method
 	 * 
-	 * @param iliFile,
-	 *            path of the source file
-	 * @return elements, all collected elements are returned
+	 * @param iliFile - path of the source file 
+	 * @return all collected elements are returned
 	 */
 	public ModelElements readAllModels(File iliFile) {
 
@@ -82,17 +85,23 @@ public class Ili2TranslationXml {
 	}
 
 	/**
-	 * with transferdescription we can get ili data from the source file.
+	 * with TransferDescription we can get ili data from the source file.
 	 * 
-	 * @param iliFile,
-	 *            The path of the source file.
-	 * @return TransferDescription, it include all configirations, settings and all
-	 *         models.
+	 * @param iliFile - The path of the source file.
+	 * @return  it include all configurations, settings and all models.
 	 */
 	public static TransferDescription compileIliModel(File iliFile) {
 		return compileIliModel(iliFile, null);
 	}
-
+	
+	
+	/**
+	 * With compileIliModel Function we can get the Ili data.
+	 * 
+	 * @param iliFile1 - we can read ili file with the file path
+	 * @param iliFile2 - we can read ili file with another file path
+	 * @return it include all configurations, settings and all models.
+	 * */
 	public static TransferDescription compileIliModel(File iliFile1, File iliFile2) {
 		Configuration ili2cConfig = new ch.interlis.ili2c.config.Configuration();
 		ili2cConfig.setAutoCompleteModelList(true);
@@ -111,7 +120,13 @@ public class Ili2TranslationXml {
 		td = ch.interlis.ili2c.Main.runCompiler(ili2cConfig, settings);
 		return td;
 	}
-
+	
+	/**
+	 * it reads and filter from the incoming td data 
+	 * 
+	 * @param TransferDescription - it include all configurations, settings and all models
+	 * @param File - path of the source file
+	 * */
 	private void printAllModels(TransferDescription td, String file) {
 		Iterator<Model> modeli = td.iterator();
 
@@ -144,7 +159,12 @@ public class Ili2TranslationXml {
 			baseLanguageModel = hasATranslation(model);
 		}
 	}
-
+	/**
+	 * it shows whether the model is translated
+	 * 
+	 * @param model - related model Element
+	 * @return If the model has a translation then it return the name of the translated model name otherwise it return empty String
+	 * */
 	private String hasATranslation(Model model) {
 
 		if (model.getTranslationOf() != null) {
@@ -152,7 +172,14 @@ public class Ili2TranslationXml {
 		}
 		return NULL;
 	}
-
+	
+	/**
+	 * the file path of the model is checking whether the given file path matches.
+	 * 
+	 * @param model - related model element
+	 * @param file - path of the source file
+	 * @return it returns true if the both file path matches otherwise it returns false
+	 * */
 	private boolean controlOfTheFileName(Model model, String file) {
 
 		if (model.getFileName() == null) {
@@ -166,7 +193,12 @@ public class Ili2TranslationXml {
 		}
 		return false;
 	}
-
+	
+	/**
+	 * in the beginning, it makes null all fields of the Structure
+	 * 
+	 * @param text - Structure of the data XML
+	 * */
 	private void allFieldsWithSetTOEmpty(TranslationElement text) {
 		text.setDocumentation_de(NULL);
 		text.setDocumentation_en(NULL);
@@ -180,7 +212,13 @@ public class Ili2TranslationXml {
 
 		text.setScopedName(NULL);
 	}
-
+	
+	/**
+	 * it returns as a String the name of the Element
+	 * 
+	 * @param model - related model element
+	 * @return it returns related matches Element otherwise it returns empty String
+	 * */
 	private String getElementType(Object model) {
 		if (model instanceof Model) {
 			return MODEL;
@@ -219,10 +257,17 @@ public class Ili2TranslationXml {
 		} else if (model instanceof Enumeration.Element) {
 			return ENUMERATION_ELEMENT;
 		} else {
-			return "";
+			return NULL;
 		}
 	}
-
+	
+	/**
+	 * it gives as a return parameter the Name of the Element type 
+	 * 
+	 * @param model - related model Element
+	 * @return it returns name of the related matches Element as a String
+	 * @throws IllegalArgumentException - if do not matches name of the related Element
+	 * */
 	private String findElementType(Object model) {
 		AbstractClassDef abstractClassDefiniton = (AbstractClassDef) model;
 		if (abstractClassDefiniton instanceof Table) {
@@ -242,9 +287,8 @@ public class Ili2TranslationXml {
 	/**
 	 * check if element contains a root language.
 	 * 
-	 * @param ele,
-	 *            check the Element if it contains the root elements.
-	 * @return Element, root language element
+	 * @param ele - check the Element if it contains the root elements.
+	 * @return root language element
 	 */
 	public static Element getElementInRootLanguage(Element ele) {
 		Element baseLanguageElement = ele.getTranslationOf();
@@ -255,11 +299,22 @@ public class Ili2TranslationXml {
 
 		return ele;
 	}
-
+	
+	/**
+	 * Insert the Structure into the ArrayList
+	 * 
+	 * @param text - Structure of the XML with data 
+	 * */
 	private void printModelElement(TranslationElement text) {
 		elements.add(text);
 	}
-
+	
+	/**
+	 * inserts model element's data into the structure with all Languages 
+	 * 
+	 * @param text - Structure of the XML
+	 * @param model - related model Element
+	 * */
 	private void setModelElementAllLanguages(TranslationElement text, Element model) {
 		String language = getLanguage(model);
 		setModelElement(text, model, language);
@@ -272,14 +327,27 @@ public class Ili2TranslationXml {
 			baseLanguageElement = translatedElement.getTranslationOf();
 		}
 	}
-
+	
+	/**
+	 * With this Function we can get the Language from element
+	 * 
+	 * @param ele - Element to be picked up
+	 * @return it gives return the name of the Element language
+	 * */
 	public static String getLanguage(Element ele) {
 		if (ele instanceof Model) {
 			return ((Model) ele).getLanguage();
 		}
 		return ((Model) ele.getContainer(Model.class)).getLanguage();
 	}
-
+	
+	/**
+	 * it gets from the Model element related data with language and Insert in the Structure
+	 * 
+	 * @param text - Structure of the XML
+	 * @param model - related model Element
+	 * @param language - Language of the Element
+	 * */
 	private void setModelElement(TranslationElement text, Element model, String language) {
 		if (language == null) {
 			if (model.getName() != null) {
@@ -320,7 +388,14 @@ public class Ili2TranslationXml {
 			}
 		}
 	}
-
+	
+	/**
+	 * it gets from the TranslatedElementName related data with language and Insert in the Structure
+	 * 
+	 * @param TranslationElement - Structure of the XML
+	 * @param Name - Name of the Element
+	 * @param Language - Language of the Element
+	 * */
 	private void setTranslationElementName(TranslationElement text, String name, String language) {
 		if (language == null) {
 			text.setName_de(name);
@@ -336,7 +411,14 @@ public class Ili2TranslationXml {
 			}
 		}
 	}
-
+	
+	/**
+	 * it gets from the ModelElementEnumeration related data with language and Insert in the Structure
+	 * 
+	 * @param text - Structure of the XML
+	 * @param model - related model Element
+	 * @param language - Language of the Element
+	 * */
 	private void setModelElementEnum(TranslationElement text, ch.interlis.ili2c.metamodel.Enumeration.Element element,
 			String language) {
 		if (language == null) {
@@ -358,7 +440,12 @@ public class Ili2TranslationXml {
 			}
 		}
 	}
-
+	
+	/**
+	 * All Elements are assigned into the related fields.
+	 * 
+	 * @param Model - related model Element
+	 * */
 	private void visitAllElements(Container model) {
 		Iterator<Element> funcI = model.iterator();
 		while (funcI.hasNext()) {
@@ -377,19 +464,24 @@ public class Ili2TranslationXml {
 				// If exist
 				if (attr.getDomain() instanceof EnumerationType) {
 					String text = getElementInRootLanguage(ele).getScopedName();
-					printAllEnumaration((EnumerationType) attr.getDomain(), text, attr);
+					prepareAllEnumaration((EnumerationType) attr.getDomain(), text, attr);
 				}
 			} else if (ele instanceof Domain) {
 				Domain domain = (Domain) ele;
 				if (domain.getType() instanceof EnumerationType) {
 					String text = getElementInRootLanguage(ele).getScopedName();
-					printAllEnumaration((EnumerationType) domain.getType(), text, domain);
+					prepareAllEnumaration((EnumerationType) domain.getType(), text, domain);
 				}
 			}
 		}
 
 	}
-
+	
+	/**
+	 * All Meta Values are assigned into the related fields.
+	 * 
+	 * @param - Related Model Element
+	 * */
 	private void addTranslationElementForMetaValues(Element ele) {
 		String eleScopedName = getElementInRootLanguage(ele).getScopedName();
 		for (String metaAttrName : ele.getMetaValues().getValues()) {
@@ -406,16 +498,37 @@ public class Ili2TranslationXml {
 			elements.add(translationElement);
 		}
 	}
-
+	
+	/**
+	 * it gives return ScopedName of the Meta Attribute
+	 * 
+	 * @param eleScopedName - ScopedName of the Element
+	 * @param metaAttrName - value of the metaAttribute
+	 * @return it returns the full scoped name of the metaAttribute
+	 * */
 	private String getMetaAttributeScopedName(String eleScopedName, String metaAttrName) {
 		return eleScopedName + METAOBJECT + metaAttrName;
 	}
-
-	private void printAllEnumaration(EnumerationType et, String scopedNamePrefix, Element modelElement) {
+	
+	/**
+	 * Prepare to get All Enumeration data 
+	 * 
+	 * @param EnumerationType - Related Enumeration Elements
+	 * @param String - Scope Name
+	 * @param Element - Model Element
+	 * */
+	private void prepareAllEnumaration(EnumerationType et, String scopedNamePrefix, Element modelElement) {
 		Enumeration enumeration = et.getEnumeration();
 		printAllEnumaration(enumeration, scopedNamePrefix, modelElement);
 	}
-
+	
+	/**
+	 * it gets all Enumeration and SubEnumeration data and insert into Structure with language 
+	 * 
+	 * @param enumeration - Related Enumeration Elements
+	 * @param ScopedName - Scope Name
+	 * @param Element - Model Element
+	 * */
 	private void printAllEnumaration(Enumeration enumeration, String scopedNamePrefix, Element modelEle) {
 		Iterator<ch.interlis.ili2c.metamodel.Enumeration.Element> enumarationIterator = enumeration.getElements();
 
@@ -446,7 +559,14 @@ public class Ili2TranslationXml {
 			}
 		}
 	}
-
+	
+	/**
+	 * Meta values are inserted into the XML file according to language 
+	 * 
+	 * @param EnumerationElement - Related All Enumeration Element
+	 * @param ScopedName - Scope Name
+	 * @param Element - Model Element
+	 * */
 	private void addMetaValues(ch.interlis.ili2c.metamodel.Enumeration.Element ele, String scopedName,
 			Element modelEle) {
 		for (String metaAttrName : ele.getMetaValues().getValues()) {
@@ -472,7 +592,13 @@ public class Ili2TranslationXml {
 			elements.add(translationElement);
 		}
 	}
-
+	
+	/**
+	 * check if element contains a root language.
+	 * 
+	 * @param ele - check the Element if it contains the root elements.
+	 * @return root language element
+	 */
 	public static ch.interlis.ili2c.metamodel.Enumeration.Element getEnumerationElementInRootLanguage(
 			Enumeration.Element ele) {
 		ch.interlis.ili2c.metamodel.Enumeration.Element baseLanguageElement = ele.getTranslationOf();
@@ -483,12 +609,23 @@ public class Ili2TranslationXml {
 
 		return ele;
 	}
-
+	
+	/**
+	 * According to File parameter it reads Model Element from the XML
+	 * 
+	 * @param Unmarshaller - 
+	 * @param File - path of the source file 
+	 * @return it returns a modelElements
+	 * */
 	public static ModelElements readModelElementsXml(Unmarshaller um, File file) throws JAXBException {
 		ModelElements modelElements = (ModelElements) um.unmarshal(file);
 		return modelElements;
 	}
-
+	/**
+	 * Settings for the XML Data so it will be ready to Read XML Folder
+	 * 
+	 * @return Unmarshaller XML Settings parameter
+	 * */
 	public static Unmarshaller createUnmarshaller() throws JAXBException {
 		Class jaxbContextPath[] = { ModelElements.class };
 		JAXBContext jaxbContext = JAXBContext.newInstance(jaxbContextPath);

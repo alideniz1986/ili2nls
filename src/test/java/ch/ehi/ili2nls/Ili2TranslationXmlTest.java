@@ -6,8 +6,16 @@ import java.io.File;
 import org.junit.Test;
 import static ch.ehi.ili2nls.Consts.*;
 
-public class Ili2TranslationXmlTest {
+/**
+ *  Test Program for Ili2TranslationXml
+ * */
 
+public class Ili2TranslationXmlTest {
+	
+	/**
+	 * DE -> Es ueberprueft, ob die Model korrekt in das ili file geschrieben wurde.
+	 * EN -> It checks if the Model was written correctly in the ili file.
+	 * */
 	//Es ueberprueft, ob die Model korrekt in das ili file geschrieben wurde.
 	@Test
 	public void model() {
@@ -29,6 +37,10 @@ public class Ili2TranslationXmlTest {
 		}
 		assertEquals(1,modelAcount);
 	}
+	/**
+	 * DE -> Es ueberprueft, ob die Model korrekt in das ili file geschrieben wurde.
+	 * EN -> It checks if the Model was written correctly in the ili file.
+	 * */
 	@Test
 	public void model2() {
 		File file = new File(ILIFILENAME);
@@ -38,7 +50,6 @@ public class Ili2TranslationXmlTest {
 			if (ele.getScopedName() != null) {
 				if (ele.getScopedName().equals("EnumOkBasis")) {
 					assertEquals("EnumOkBasis", ele.getName_de());
-					System.out.println(ele.getElementType());
 					assertEquals(MODEL, ele.getElementType());
 					return;
 				}
@@ -46,7 +57,11 @@ public class Ili2TranslationXmlTest {
 		}
 		fail("MODEL EnumOkBasis can not be found!");
 	}
-	
+
+	/**
+	 * DE -> Es ueberprueft, ob die Topic korrekt in das ili file geschrieben wurde.
+	 * EN -> It checks if the Topic was written correctly in the ili file.
+	 * */
 	//Es ueberprueft, ob die Topic korrekt in das ili file geschrieben wurde.
 	@Test
 	public void topic() {
@@ -65,7 +80,10 @@ public class Ili2TranslationXmlTest {
 		}
 		fail("TOPIC can not be found!");
 	}
-	
+	/**
+	 * DE -> Es ueberprueft, ob die Topic MetaAttribute korrekt in das ili file geschrieben wurde.
+	 * EN -> It checks if the Topic MetaAttribute was written correctly in the ili file.
+	 * */
 	//Es ueberprueft, ob die MetaAttribute korrekt in das ili file geschrieben wurde.
 	@Test
 	public void topicMetaAttribute() {
@@ -85,6 +103,10 @@ public class Ili2TranslationXmlTest {
 		fail("METAATTRIBUTE can not be found!");
 	}
 	
+	/**
+	 * DE -> Es ueberprueft, ob die Structure korrekt in das ili file geschrieben wurde.
+	 * EN -> It checks if the Structure was written correctly in the ili file.
+	 * */
 	//Es ueberprueft, ob die Class korrekt in das ili file geschrieben wurde.
 	@Test
 	public void structure() {
@@ -103,7 +125,11 @@ public class Ili2TranslationXmlTest {
 		}
 		fail("STRUCTURE can not be found!");
 	}
-	
+
+	/**
+	 * DE -> Es ueberprueft, ob die Class korrekt in das ili file geschrieben wurde.
+	 * EN -> It checks if the Class was written correctly in the ili file.
+	 * */
 	//Es ueberprueft, ob die Class korrekt in das ili file geschrieben wurde.
 	@Test
 	public void classTest() {
@@ -122,7 +148,11 @@ public class Ili2TranslationXmlTest {
 		}
 		fail("CLASS can not be found!");
 	}
-	
+
+	/**
+	 * DE -> Es ueberprueft, ob die Attributes korrekt in das ili file geschrieben wurde.
+	 * EN -> It checks if the Attributes was written correctly in the ili file.
+	 * */
 	//Es ueberprueft, ob die Attributes korrekt in das ili file geschrieben wurde.
 	@Test
 	public void attribute() {
@@ -143,8 +173,12 @@ public class Ili2TranslationXmlTest {
 		}
 		fail("ATTRIBUTE can not be found!");
 	}
-	
-	//Es ueberprueft, ob die Enumerationsdocu korrekt in das ili file geschrieben wurde.
+
+	/**
+	 * DE -> Es ueberprueft, ob die Enumerations korrekt in das ili file geschrieben wurde.
+	 * EN -> It checks if the Enumerations was written correctly in the ili file.
+	 * */
+	//Es ueberprueft, ob die Enumerations korrekt in das ili file geschrieben wurde.
 	@Test
 	public void enumeration() {
 		File file = new File(ILIFILENAME);
@@ -164,7 +198,11 @@ public class Ili2TranslationXmlTest {
 		}
 		fail("ENUMERATION ELEMENT can not be found!");
 	}
-	
+
+	/**
+	 * DE -> Es ueberprueft, ob die Subenumerations korrekt in das ili file geschrieben wurde.
+	 * EN -> It checks if the Subenumerations was written correctly in the ili file.
+	 * */
 	//Es ueberprueft, ob die SubEnumerations korrekt in das ili file geschrieben wurde.
 	@Test
 	public void enumerationSubEnum() {
@@ -184,6 +222,10 @@ public class Ili2TranslationXmlTest {
 		fail("ENUMERATION ELEMENT can not be found!");
 	}
 	
+	/**
+	 * DE -> Es ueberprueft, ob die EnumerationELement MetaAttribute korrekt in das ili file geschrieben wurde.
+	 * EN -> It checks if the EnumerationELement MetaAttribute was written correctly in the ili file.
+	 * */
 	//Es ueberprueft, ob die MetaAttributes korrekt in das ili file geschrieben wurde.
 	@Test
 	public void enumerationElementMetaAttribute() {
@@ -202,7 +244,11 @@ public class Ili2TranslationXmlTest {
 		}
 		fail("METAATTRIBUTE can not be found!");
 	}
-	
+
+	/**
+	 * DE -> Es ueberprueft, ob die Association korrekt in das ili file geschrieben wurde.
+	 * EN -> It checks if the Association was written correctly in the ili file.
+	 * */
 	//Es ueberprueft, ob die Association korrekt in das ili file geschrieben wurde.
 	@Test
 	public void association() {
@@ -221,8 +267,11 @@ public class Ili2TranslationXmlTest {
 		}
 		fail("ASSOCIATION can not be found!");
 	}
-	
-	//Es ueberprueft, ob die Rolle korrekt in das ili file geschrieben wurde.
+	/**
+	 * DE -> Es ueberprueft, ob die Role korrekt in das ili file geschrieben wurde.
+	 * EN -> It checks if the Role was written correctly in the ili file.
+	 * */
+	//Es ueberprueft, ob die Role korrekt in das ili file geschrieben wurde.
 	@Test
 	public void role() {
 		File file = new File(ILIFILENAME);
@@ -240,7 +289,11 @@ public class Ili2TranslationXmlTest {
 		}
 		fail("ROLE can not be found!");
 	}
-		
+	
+	/**
+	 * DE -> Es ueberprueft, ob die Constraint ohne expliziten Namen korrekt in das ili file geschrieben wurde.
+	 * EN -> It checks if the Constraint without explicit name was written correctly in the ili file.
+	 * */
 	//Es ueberprueft, ob die Constraint korrekt in das ili file geschrieben wurde.
 	@Test
 	public void constraintWithoutExplicitName() {
@@ -259,7 +312,11 @@ public class Ili2TranslationXmlTest {
 		}
 		fail("Constraint without explicit name can not be found!");
 	}
-	
+
+	/**
+	 * DE -> Es ueberprueft, ob die Constraint mit expliziten Namen korrekt in das ili file geschrieben wurde.
+	 * EN -> It checks if the Constraint with explicit name was written correctly in the ili file.
+	 * */
 	//Es ueberprueft, ob die Constraint korrekt in das ili file geschrieben wurde.
 	@Test
 	public void constraintWithExplicitName() {

@@ -31,6 +31,10 @@ import static ch.ehi.ili2nls.Consts.*;
 
 public class Interlis2GeneratorTest {
 
+	/**
+	 * DE -> Es ueberprueft, ob die Model korrekt in das ili file geschrieben wurde.
+	 * EN -> It checks if the Model was written correctly in the ili file.
+	 * */
 	// Es ueberprueft, ob die Model korrekt in das ili file geschrieben wurde.
 	@Test
 	public void model() throws Exception {
@@ -56,6 +60,10 @@ public class Interlis2GeneratorTest {
 		assertEquals("EnumOkA", modelEle.getTranslationOf().getScopedName());
 	}
 
+	/**
+	 * DE -> Es ueberprueft, ob die Topic korrekt in das ili file geschrieben wurde.
+	 * EN -> It checks if the Topic was written correctly in the ili file.
+	 * */
 	// Es ueberprueft, ob die TopicB korrekt in das ili file geschrieben wurde.
 	@Test
 	public void topic() throws Exception {
@@ -80,7 +88,10 @@ public class Interlis2GeneratorTest {
 		assertNotNull(modelEle.getTranslationOf());
 		assertEquals("EnumOkA.TopicA", modelEle.getTranslationOf().getScopedName());
 	}
-
+	/**
+	 * DE -> Es ueberprueft, ob die Class korrekt in das ili file geschrieben wurde.
+	 * EN -> It checks if the Class was written correctly in the ili file.
+	 * */
 	// Es ueberprueft, ob die ClassB korrekt in das ili file geschrieben wurde.
 	@Test
 	public void classTest() throws Exception {
@@ -105,7 +116,10 @@ public class Interlis2GeneratorTest {
 		assertNotNull(modelEle.getTranslationOf());
 		assertEquals("EnumOkA.TopicA.ClassA", modelEle.getTranslationOf().getScopedName());
 	}
-
+	/**
+	 * DE -> Es ueberprueft, ob die Attribute korrekt in das ili file geschrieben wurde.
+	 * EN -> It checks if the Attribute was written correctly in the ili file.
+	 * */
 	// Es ueberprueft, ob die Attribute korrekt in das ili file geschrieben wurde.
 	@Test
 	public void attribute() throws Exception {
@@ -130,7 +144,10 @@ public class Interlis2GeneratorTest {
 		assertNotNull(modelEle.getTranslationOf());
 		assertEquals("EnumOkA.TopicA.ClassA.attrA", modelEle.getTranslationOf().getScopedName());
 	}
-
+	/**
+	 * DE -> Es ueberprueft, ob die SubEnumerationB21 korrekt in das ili file geschrieben wurde.
+	 * EN -> It checks if the SubEnumerationB21 was written correctly in the ili file.
+	 * */
 	// Es ueberprueft, ob die SubEnumerationB21 korrekt in das ili file geschrieben wurde.
 	@Test
 	public void enumElementB21() throws Exception {
@@ -154,9 +171,11 @@ public class Interlis2GeneratorTest {
 		assertEquals(FR, Ili2TranslationXml.getLanguage(modelEle));
 		assertNotNull(modelEle.getTranslationOf());
 		assertTrue(hasEnumElement(modelEle.getTranslationOf(), "a2.a21"));
-
 	}
-	
+	/**
+	 * DE -> Es ueberprueft, ob die TopicMetaAttribute korrekt in das ili file geschrieben wurde.
+	 * EN -> It checks if the TopicMetaAttribute was written correctly in the ili file.
+	 * */
 	// Es ueberprueft, ob die TopicMetaAttribute korrekt in das ili file geschrieben wurde.
 	@Test
 	public void topicMetaAttribute() throws Exception {
@@ -182,7 +201,10 @@ public class Interlis2GeneratorTest {
 		assertNotNull(modelEle.getTranslationOf());
 		assertEquals("Topic A", modelEle.getTranslationOf().getMetaValues().getValue("dispName"));
 	}
-	
+	/**
+	 * DE -> Es ueberprueft, ob die Constraint ohne expliziten Namen korrekt in das ili file geschrieben wurde.
+	 * EN -> It checks if the Constraint without Explicit Name was written correctly in the ili file.
+	 * */
 	// Es ueberprueft, ob die Constraint korrekt in das ili file geschrieben wurde.
 	@Test
 	public void constraintWithoutExplicitName() throws Exception {
@@ -207,7 +229,10 @@ public class Interlis2GeneratorTest {
 		assertNotNull(modelEle.getTranslationOf());
 		assertEquals("EnumOkA.TopicA.ClassA.Constraint1", modelEle.getTranslationOf().getScopedName());
 	}
-	
+	/**
+	 * DE -> Es ueberprueft, ob die Constraint mit expliziten Namen korrekt in das ili file geschrieben wurde.
+	 * EN -> It checks if the Constraint with explicit name was written correctly in the ili file.
+	 * */
 	// Es ueberprueft, ob die Constraint korrekt in das ili file geschrieben wurde.
 	@Test
 	public void constraintWithExplicitName() throws Exception {
@@ -232,7 +257,10 @@ public class Interlis2GeneratorTest {
 		assertNotNull(modelEle.getTranslationOf());
 		assertEquals("EnumOkA.TopicA.ClassA.UniqueConstraintA", modelEle.getTranslationOf().getScopedName());
 	}
-	
+	/**
+	 * DE -> Es ueberprueft, ob die Role korrekt in das ili file geschrieben wurde.
+	 * EN -> It checks if the Role was written correctly in the ili file.
+	 * */
 	// Es ueberprueft, ob die Rolle korrekt in das ili file geschrieben wurde.
 	@Test
 	public void role() throws Exception {
@@ -257,7 +285,10 @@ public class Interlis2GeneratorTest {
 		assertNotNull(modelEle.getTranslationOf());
 		assertEquals("EnumOkA.TopicA.roleA1roleA2.roleA1", modelEle.getTranslationOf().getScopedName());
 	}
-	
+	/**
+	 * DE -> Es ueberprueft, ob die Association korrekt in das ili file geschrieben wurde.
+	 * EN -> It checks if the Association was written correctly in the ili file.
+	 * */
 	// Es ueberprueft, ob die Association korrekt in das ili file geschrieben wurde.
 	@Test
 	public void association() throws Exception {
@@ -282,6 +313,10 @@ public class Interlis2GeneratorTest {
 		assertNotNull(modelEle.getTranslationOf());
 		assertEquals("EnumOkA.TopicA.roleA1roleA2", modelEle.getTranslationOf().getScopedName());
 	}
+	/**
+	 * DE -> Es ueberprueft, ob die ConstraintInAssociation korrekt in das ili file geschrieben wurde.
+	 * EN -> It checks if the ConstraintInAssociation was written correctly in the ili file.
+	 * */
 	@Test
 	public void constraintInAssociation() throws Exception {
 		// ili lesen
@@ -305,7 +340,10 @@ public class Interlis2GeneratorTest {
 		assertNotNull(modelEle.getTranslationOf());
 		assertEquals("EnumOkA.TopicA.roleA1roleA2.Constraint1", modelEle.getTranslationOf().getScopedName());
 	}
-	
+	/**
+	 * DE -> Es ueberprueft, ob die EnumerationELement MetaAttribute korrekt in das ili file geschrieben wurde.
+	 * EN -> It checks if the EnumerationELement MetaAttribute was written correctly in the ili file.
+	 * */
 	// Es ueberprueft, ob die Association korrekt in das ili file geschrieben wurde.
 	@Test
 	public void enumElementMetaAttribute() throws Exception {
@@ -332,7 +370,13 @@ public class Interlis2GeneratorTest {
 		assertTrue(getMetaValueFromEnumerationElement(modelEle.getTranslationOf(), "a 2", "a2"));
 	}
 	
-
+	/**
+	 * Checking if MetaAttribute is in EnumerationElement
+	 * 
+	 * @param ModelEle - Related ModelEle
+	 * @param ExpectedMetaValue - expected Meta Value
+	 * @param wantedEnumerationElement - Enumeration Element
+	 * */
 	private boolean getMetaValueFromEnumerationElement(Element modelEle, String expectedMetaValue, String wantedEnumerationElement) {
 		if (modelEle instanceof AttributeDef) {
 			AttributeDef attr = (AttributeDef) modelEle;
@@ -354,13 +398,26 @@ public class Interlis2GeneratorTest {
 		return false;
 	}
 
+	/**
+	 * Checks whether metaAttName and expectedMetaValue are the same.
+	 * 
+	 * @param Element - Related Model Element
+	 * @param ExpectedMetaValue - expected Meta Value
+	 * @param MetaAttributeName - Meta Attribute Name
+	 * */
 	private boolean hasMetaElement(Element modelEle, String expectedMetaValue, String metaAttName) {
 		if (modelEle.getMetaValues().getValue(metaAttName).equals(expectedMetaValue)) {
 			return true;
 		}
 		return false;
 	}
-
+	
+	/**
+	 * if ModelEle has a Enum Element then it check to same between enum Element Name and Enumeration Type 
+	 * 
+	 * @param Element - Related Model Element
+	 * @param EnumElementName - expected Element Name
+	 * */
 	private boolean hasEnumElement(Element modelEle, String enumElementName) {
 		if (modelEle instanceof Domain) {
 			Domain domain = (Domain) modelEle;
@@ -375,7 +432,13 @@ public class Interlis2GeneratorTest {
 		}
 		return false;
 	}
-
+	
+	/**
+	 * check if EnumElement contains a EnumElementName.
+	 * 
+	 * @param enumElementName - expected Element Name
+	 * @param EnumerationType - Related Enumeration Type
+	 * */
 	private boolean hasEnumElement(EnumerationType et, String enumElementName) {
 		Enumeration enumeration = et.getEnumeration();
 		ArrayList<String> elements=new ArrayList<String>();
