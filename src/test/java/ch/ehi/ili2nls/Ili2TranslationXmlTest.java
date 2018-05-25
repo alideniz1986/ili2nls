@@ -4,10 +4,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import java.io.File;
 import org.junit.Test;
+import static ch.ehi.ili2nls.Consts.*;
 
 public class Ili2TranslationXmlTest {
-
-	private static final String ILIFILENAME = "src/test/data/ili2translationxml/EnumOk.ili";
 
 	//Es ueberprueft, ob die Model korrekt in das ili file geschrieben wurde.
 	@Test
@@ -23,6 +22,7 @@ public class Ili2TranslationXmlTest {
 					assertEquals("EnumOkB", ele.getName_fr());
 					assertEquals("Das ist Dokumentation zum Modell in DE", ele.getDocumentation_de());
 					assertEquals("Das ist Dokumentation zum Modell in FR", ele.getDocumentation_fr());
+					assertEquals(MODEL, ele.getElementType());
 					modelAcount++;
 				}
 			}
@@ -38,6 +38,8 @@ public class Ili2TranslationXmlTest {
 			if (ele.getScopedName() != null) {
 				if (ele.getScopedName().equals("EnumOkBasis")) {
 					assertEquals("EnumOkBasis", ele.getName_de());
+					System.out.println(ele.getElementType());
+					assertEquals(MODEL, ele.getElementType());
 					return;
 				}
 			}
@@ -56,6 +58,7 @@ public class Ili2TranslationXmlTest {
 				if (ele.getScopedName().equals("EnumOkA.TopicA")) {
 					assertEquals("TopicA", ele.getName_de());
 					assertEquals("TopicB", ele.getName_fr());
+					assertEquals(TOPIC, ele.getElementType());
 					return;
 				}
 			}
@@ -74,11 +77,31 @@ public class Ili2TranslationXmlTest {
 				if (ele.getScopedName().equals("EnumOkA.TopicA.METAOBJECT.dispName")) {
 					assertEquals("Topic A", ele.getName_de());
 					assertEquals("Topic B", ele.getName_fr());
+					assertEquals(METAATTRIBUTE, ele.getElementType());
 					return;
 				}
 			}
 		}
-		fail("MetaAttribute can not be found!");
+		fail("METAATTRIBUTE can not be found!");
+	}
+	
+	//Es ueberprueft, ob die Class korrekt in das ili file geschrieben wurde.
+	@Test
+	public void structure() {
+		File file = new File(ILIFILENAME);
+		Ili2TranslationXml dateiLesen = new Ili2TranslationXml();
+		ModelElements eles = dateiLesen.readAllModels(file);
+		for (TranslationElement ele : eles) {
+			if (ele.getScopedName() != null) {
+				if (ele.getScopedName().equals("EnumOkA.TopicA.StructureA")) {
+					assertEquals("StructureA", ele.getName_de());
+					assertEquals("StructureB", ele.getName_fr());
+					assertEquals(STRUCTURE, ele.getElementType());
+					return;
+				}
+			}
+		}
+		fail("STRUCTURE can not be found!");
 	}
 	
 	//Es ueberprueft, ob die Class korrekt in das ili file geschrieben wurde.
@@ -92,6 +115,7 @@ public class Ili2TranslationXmlTest {
 				if (ele.getScopedName().equals("EnumOkA.TopicA.ClassA")) {
 					assertEquals("ClassA", ele.getName_de());
 					assertEquals("ClassB", ele.getName_fr());
+					assertEquals(CLASS,ele.getElementType());
 					return;
 				}
 			}
@@ -112,11 +136,12 @@ public class Ili2TranslationXmlTest {
 					assertEquals("attrB", ele.getName_fr());
 					assertEquals("Das ist Dokumentation in DE", ele.getDocumentation_de());
 					assertEquals("Das ist Dokumentation in FR", ele.getDocumentation_fr());
+					assertEquals(ATTRIBUTE, ele.getElementType());
 					return;
 				}
 			}
 		}
-		fail("ATTRIBUTES can not be found!");
+		fail("ATTRIBUTE can not be found!");
 	}
 	
 	//Es ueberprueft, ob die Enumerationsdocu korrekt in das ili file geschrieben wurde.
@@ -132,11 +157,12 @@ public class Ili2TranslationXmlTest {
 					assertEquals("b2", ele.getName_fr());
 					assertEquals("enum docu zu a2", ele.getDocumentation_de());
 					assertEquals("enum docu zu b2", ele.getDocumentation_fr());
+					assertEquals(ENUMERATION_ELEMENT, ele.getElementType());
 					return;
 				}
 			}
 		}
-		fail("Element can not be found!");
+		fail("ENUMERATION ELEMENT can not be found!");
 	}
 	
 	//Es ueberprueft, ob die SubEnumerations korrekt in das ili file geschrieben wurde.
@@ -150,11 +176,12 @@ public class Ili2TranslationXmlTest {
 				if (ele.getScopedName().equals("EnumOkA.TopicA.ClassA.attrA.a2.a21")) {
 					assertEquals("a21", ele.getName_de());
 					assertEquals("b21", ele.getName_fr());
+					assertEquals(ENUMERATION_ELEMENT, ele.getElementType());
 					return;
 				}
 			}
 		}
-		fail("Subelements of Enumeration can not be found!");
+		fail("ENUMERATION ELEMENT can not be found!");
 	}
 	
 	//Es ueberprueft, ob die MetaAttributes korrekt in das ili file geschrieben wurde.
@@ -168,11 +195,12 @@ public class Ili2TranslationXmlTest {
 				if (ele.getScopedName().equals("EnumOkA.TopicA.ClassA.attrA.a2.METAOBJECT.dispName")) {
 					assertEquals("a 2", ele.getName_de());
 					assertEquals("b 2", ele.getName_fr());
+					assertEquals(METAATTRIBUTE, ele.getElementType());
 					return;
 				}
 			}
 		}
-		fail("Enumeration element of Meta Attributes can not be found!");
+		fail("METAATTRIBUTE can not be found!");
 	}
 	
 	//Es ueberprueft, ob die Association korrekt in das ili file geschrieben wurde.
@@ -186,6 +214,7 @@ public class Ili2TranslationXmlTest {
 				if (ele.getScopedName().equals("EnumOkA.TopicA.roleA1roleA2")) {
 					assertEquals("roleA1roleA2", ele.getName_de());
 					assertEquals("roleB1roleB2", ele.getName_fr());
+					assertEquals(ASSOCIATION, ele.getElementType());
 					return;
 				}
 			}
@@ -204,11 +233,12 @@ public class Ili2TranslationXmlTest {
 				if (ele.getScopedName().equals("EnumOkA.TopicA.roleA1roleA2.roleA1")) {
 					assertEquals("roleA1", ele.getName_de());
 					assertEquals("roleB1", ele.getName_fr());
+					assertEquals(ROLE, ele.getElementType());
 					return;
 				}
 			}
 		}
-		fail("ROLLE can not be found!");
+		fail("ROLE can not be found!");
 	}
 		
 	//Es ueberprueft, ob die Constraint korrekt in das ili file geschrieben wurde.
@@ -222,6 +252,7 @@ public class Ili2TranslationXmlTest {
 				if (ele.getScopedName().equals("EnumOkA.TopicA.ClassA.Constraint1")) {
 					assertEquals("Constraint1", ele.getName_de());
 					assertEquals("Constraint1", ele.getName_fr());
+					assertEquals(CONSTRAINT, ele.getElementType());
 					return;
 				}
 			}
@@ -240,6 +271,7 @@ public class Ili2TranslationXmlTest {
 				if (ele.getScopedName().equals("EnumOkA.TopicA.ClassA.UniqueConstraintA")) {
 					assertEquals("UniqueConstraintA", ele.getName_de());
 					assertEquals("UniqueConstraintB", ele.getName_fr());
+					assertEquals(CONSTRAINT, ele.getElementType());
 					return;
 				}
 			}

@@ -27,12 +27,9 @@ import ch.interlis.ili2c.metamodel.Table;
 import ch.interlis.ili2c.metamodel.Topic;
 import ch.interlis.ili2c.metamodel.TransferDescription;
 import ch.interlis.ili2c.metamodel.UniquenessConstraint;
+import static ch.ehi.ili2nls.Consts.*;
 
 public class Interlis2GeneratorTest {
-
-	private static final String FR = "fr";
-	private static final String FILEPATH = "src/test/data/interlis2generator/EnumOk_de.ili";
-	private static final String NEWFILEPATH = "out.ili";
 
 	// Es ueberprueft, ob die Model korrekt in das ili file geschrieben wurde.
 	@Test
@@ -382,7 +379,7 @@ public class Interlis2GeneratorTest {
 	private boolean hasEnumElement(EnumerationType et, String enumElementName) {
 		Enumeration enumeration = et.getEnumeration();
 		ArrayList<String> elements=new ArrayList<String>();
-		EnumerationType.buildEnumList(elements, "", enumeration);
+		EnumerationType.buildEnumList(elements, NULL, enumeration);
 		if (elements.contains(enumElementName) == true) {
 			return true;
 		}

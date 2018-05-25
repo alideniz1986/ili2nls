@@ -17,7 +17,6 @@ import ch.interlis.ili2c.config.FileEntryKind;
 import ch.interlis.ili2c.metamodel.AbstractClassDef;
 import ch.interlis.ili2c.metamodel.AssociationDef;
 import ch.interlis.ili2c.metamodel.AttributeDef;
-import ch.interlis.ili2c.metamodel.Constant.Structured;
 import ch.interlis.ili2c.metamodel.Constraint;
 import ch.interlis.ili2c.metamodel.Container;
 import ch.interlis.ili2c.metamodel.Domain;
@@ -38,6 +37,7 @@ import ch.interlis.ili2c.metamodel.Topic;
 import ch.interlis.ili2c.metamodel.TransferDescription;
 import ch.interlis.ili2c.metamodel.Unit;
 import ch.interlis.ili2c.metamodel.View;
+import static ch.ehi.ili2nls.Consts.*;
 
 /**
  * Reads data from the ili file and creates a new XML document..
@@ -46,7 +46,8 @@ import ch.interlis.ili2c.metamodel.View;
 
 public class Ili2TranslationXml {
 
-	private static final String METAATTRIBUTE = "METAATTRIBUTE";
+	
+
 	private ModelElements elements = new ModelElements();
 
 	public ModelElements readAllModel(TransferDescription td, File iliFile) {
@@ -118,7 +119,7 @@ public class Ili2TranslationXml {
 		while (modeli.hasNext()) {
 			list.add(0, modeli.next());
 		}
-		String baseLanguageModel = "";
+		String baseLanguageModel = Consts.NULL;
 		modeli = list.iterator();
 		while (modeli.hasNext()) {
 			Model model = modeli.next();
@@ -132,7 +133,7 @@ public class Ili2TranslationXml {
 			}
 
 			TranslationElement text = new TranslationElement();
-			text = allFieldsWithSetTOEmpty(text);
+			allFieldsWithSetTOEmpty(text);
 			text.setScopedName(getElementInRootLanguage(model).getScopedName());
 
 			text.setElementType(getElementType(model));
@@ -140,7 +141,6 @@ public class Ili2TranslationXml {
 			printModelElement(text);
 
 			visitAllElements(model);
-
 			baseLanguageModel = hasATranslation(model);
 		}
 	}
@@ -150,7 +150,7 @@ public class Ili2TranslationXml {
 		if (model.getTranslationOf() != null) {
 			return model.getTranslationOf().getName();
 		}
-		return "";
+		return NULL;
 	}
 
 	private boolean controlOfTheFileName(Model model, String file) {
@@ -167,73 +167,75 @@ public class Ili2TranslationXml {
 		return false;
 	}
 
-	private TranslationElement allFieldsWithSetTOEmpty(TranslationElement text) {
-		text.setDocumentation_de("");
-		text.setDocumentation_en("");
-		text.setDocumentation_fr("");
-		text.setDocumentation_it("");
+	private void allFieldsWithSetTOEmpty(TranslationElement text) {
+		text.setDocumentation_de(NULL);
+		text.setDocumentation_en(NULL);
+		text.setDocumentation_fr(NULL);
+		text.setDocumentation_it(NULL);
 
-		text.setName_de("");
-		text.setName_en("");
-		text.setName_fr("");
-		text.setName_it("");
+		text.setName_de(NULL);
+		text.setName_en(NULL);
+		text.setName_fr(NULL);
+		text.setName_it(NULL);
 
-		text.setScopedName("");
-		return text;
+		text.setScopedName(NULL);
 	}
 
 	private String getElementType(Object model) {
 		if (model instanceof Model) {
-			return "MODEL";
+			return MODEL;
 		} else if (model instanceof AttributeDef) {
-			return "ATTRIBUTE";
+			return ATTRIBUTE;
 		} else if (model instanceof RoleDef) {
-			return "ROLE";
+			return ROLE;
 		} else if (model instanceof Function) {
-			return "FUNCTION";
+			return FUNCTION;
 		} else if (model instanceof Parameter) {
-			return "PARAMETER";
+			return PARAMETER;
 		} else if (model instanceof Domain) {
-			return "DOMAIN";
+			return DOMAIN;
 		} else if (model instanceof LineForm) {
-			return "LINE FORM";
+			return LINE_FORM;
 		} else if (model instanceof Unit) {
-			return "UNIT";
-		} else if (model instanceof Model) {
-			return "MODEL";
+			return UNIT;
 		} else if (model instanceof Topic) {
-			return "TOPIC";
+			return TOPIC;
 		} else if (model instanceof MetaDataUseDef) {
-			return "META DATA BASKET";
-		} else if (model instanceof Table) {
-			AbstractClassDef def = (Table) model;
-			if (def instanceof Table) {
-				Table tdef = (Table) def;
-				if (tdef.isIdentifiable()) {
-					return "CLASS";
-				} else {
-					return "STRUCTURE";
-				}
-			} else if (def instanceof AssociationDef) {
-				return "ASSOCIATION";
-			} else
-				return "";
+			return META_DATA_BASKET;
+		} else if (model instanceof AbstractClassDef) {
+			return findElementType(model);
 		} else if (model instanceof AssociationDef) {
-			return "ASSOCIATION";
+			return ASSOCIATION;
 		} else if (model instanceof View) {
-			return "VIEW";
+			return VIEW;
 		} else if (model instanceof Graphic) {
-			return "GRAPHIC";
+			return GRAPHIC;
 		} else if (model instanceof Constraint) {
-			return "CONSTRAINT";
+			return CONSTRAINT;
 		} else if (model instanceof ExpressionSelection) {
-			return "EXPRESSION SELECTION";
+			return EXPRESSION_SELECTION;
 		} else if (model instanceof SignAttribute) {
-			return "SIGN ATTRIBUTE";
+			return SIGN_ATTRIBUTE;
 		} else if (model instanceof Enumeration.Element) {
-			return "ENUMERATION ELEMENT";
+			return ENUMERATION_ELEMENT;
 		} else {
 			return "";
+		}
+	}
+
+	private String findElementType(Object model) {
+		AbstractClassDef abstractClassDefiniton = (AbstractClassDef) model;
+		if (abstractClassDefiniton instanceof Table) {
+			Table table = (Table) abstractClassDefiniton;
+			if (table.isIdentifiable()) {
+				return CLASS;
+			} else {
+				return STRUCTURE;
+			}
+		} else if (abstractClassDefiniton instanceof AssociationDef) {
+			return ASSOCIATION;
+		} else {
+			throw new IllegalArgumentException("Unexpected AbstractClassDef");
 		}
 	}
 
@@ -287,28 +289,28 @@ public class Ili2TranslationXml {
 				text.setDocumentation_de(model.getDocumentation());
 			}
 		} else {
-			if (language.equals("de")) {
+			if (language.equals(DE)) {
 				if (model.getName() != null) {
 					text.setName_de(model.getName());
 				}
 				if (model.getDocumentation() != null) {
 					text.setDocumentation_de(model.getDocumentation());
 				}
-			} else if (language.equals("fr")) {
+			} else if (language.equals(FR)) {
 				if (model.getName() != null) {
 					text.setName_fr(model.getName());
 				}
 				if (model.getDocumentation() != null) {
 					text.setDocumentation_fr(model.getDocumentation());
 				}
-			} else if (language.equals("it")) {
+			} else if (language.equals(IT)) {
 				if (model.getName() != null) {
 					text.setName_it(model.getName());
 				}
 				if (model.getDocumentation() != null) {
 					text.setDocumentation_it(model.getDocumentation());
 				}
-			} else if (language.equals("en")) {
+			} else if (language.equals(EN)) {
 				if (model.getName() != null) {
 					text.setName_en(model.getName());
 				}
@@ -323,13 +325,13 @@ public class Ili2TranslationXml {
 		if (language == null) {
 			text.setName_de(name);
 		} else {
-			if (language.equals("de")) {
+			if (language.equals(DE)) {
 				text.setName_de(name);
-			} else if (language.equals("fr")) {
+			} else if (language.equals(FR)) {
 				text.setName_fr(name);
-			} else if (language.equals("it")) {
+			} else if (language.equals(IT)) {
 				text.setName_it(name);
-			} else if (language.equals("en")) {
+			} else if (language.equals(EN)) {
 				text.setName_en(name);
 			}
 		}
@@ -341,16 +343,16 @@ public class Ili2TranslationXml {
 			text.setName_de(element.getName());
 			text.setDocumentation_de(element.getDocumentation());
 		} else {
-			if (language.equals("de")) {
+			if (language.equals(DE)) {
 				text.setName_de(element.getName());
 				text.setDocumentation_de(element.getDocumentation());
-			} else if (language.equals("fr")) {
+			} else if (language.equals(FR)) {
 				text.setName_fr(element.getName());
 				text.setDocumentation_fr(element.getDocumentation());
-			} else if (language.equals("it")) {
+			} else if (language.equals(IT)) {
 				text.setName_it(element.getName());
 				text.setDocumentation_de(element.getDocumentation());
-			} else if (language.equals("en")) {
+			} else if (language.equals(EN)) {
 				text.setName_en(element.getName());
 				text.setDocumentation_en(element.getDocumentation());
 			}
@@ -406,7 +408,7 @@ public class Ili2TranslationXml {
 	}
 
 	private String getMetaAttributeScopedName(String eleScopedName, String metaAttrName) {
-		return eleScopedName + ".METAOBJECT." + metaAttrName;
+		return eleScopedName + METAOBJECT + metaAttrName;
 	}
 
 	private void printAllEnumaration(EnumerationType et, String scopedNamePrefix, Element modelElement) {
